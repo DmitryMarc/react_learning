@@ -9,6 +9,6 @@ const Technologies = () => {
             </ul>
         </div>
     );
-};
+}
 
 export default Technologies;
