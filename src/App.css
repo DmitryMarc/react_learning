@@ -1,3 +1,41 @@
-ul li {
-  list-style-type: georgian;
+.app-wrapper{
+  width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-areas: 
+  "h h"
+  "sb c";
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 2fr 10fr;
+  gap: 5px;
+
 }
+
+.header{
+  grid-area: h;
+  background-color: green;
+}
+
+.header img{
+  width: 20px;
+}
+
+.side-bar{
+  grid-area: sb;
+  background-color: brown;
+}
+
+.side-bar > ul{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.content{
+  grid-area: c;
+  background-color: blue;
+}
+
+/* .content img{
+
+} */
