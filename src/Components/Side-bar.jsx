@@ -1,14 +1,14 @@
-import React from 'react';
+import classes from  './Side-bar.module.css';
 
 const SideBar = () => {
     return (
-        <nav className='side-bar'>
+        <nav className={classes.side__bar}>
             <ul>
-                <li><a href='#'>Ptofile</a></li>
-                <li><a href='#'>Messages</a></li>
-                <li><a href='#'>News</a></li>
-                <li><a href='#'>Music</a></li>
-                <li><a href='#'>Settings</a></li>
+                <li className={classes.item}><a href='#'>Ptofile</a></li>
+                <li className={classes.item}><a href='#'>Messages</a></li>
+                <li className={classes.item}><a href='#'>News</a></li>
+                <li className={classes.item}><a href='#'>Music</a></li>
+                <li className={classes.item}><a href='#'>Settings</a></li>
             </ul>
         </nav>
     );

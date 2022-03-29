@@ -1,0 +1,16 @@
+
+.side__bar{
+    grid-area: sb;
+    background-color: brown;
+  }
+  
+.side__bar > ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+.item a{
+    color: white;
+    text-decoration: none;
+}

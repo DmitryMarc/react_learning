@@ -11,31 +11,3 @@
 
 }
 
-.header{
-  grid-area: h;
-  background-color: green;
-}
-
-.header img{
-  width: 20px;
-}
-
-.side-bar{
-  grid-area: sb;
-  background-color: brown;
-}
-
-.side-bar > ul{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.content{
-  grid-area: c;
-  background-color: blue;
-}
-
-/* .content img{
-
-} */
