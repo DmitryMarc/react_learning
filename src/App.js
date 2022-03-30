@@ -1,9 +1,9 @@
 
 import { renderIntoDocument } from 'react-dom/test-utils';
 import './App.css';
-import Header from './Components/Header';
-import Profile from './Components/Profile';
-import SideBar from './Components/Side-bar';
+import Header from './Components/Header/Header';
+import Profile from './Components/Profile/Profile';
+import SideBar from './Components/Side-bar/Side-bar';
 
 
 const App = () => {
