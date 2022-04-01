@@ -4,7 +4,7 @@ const SideBar = () => {
     return (
         <nav className={classes.side__bar}>
             <ul>
-                <li className={classes.item}><a href='#'>Ptofile</a></li>
+                <li className={classes.item}><a className={classes.active} href='#'>Ptofile</a></li>
                 <li className={classes.item}><a href='#'>Messages</a></li>
                 <li className={classes.item}><a href='#'>News</a></li>
                 <li className={classes.item}><a href='#'>Music</a></li>

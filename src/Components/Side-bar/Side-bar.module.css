@@ -14,3 +14,7 @@
     color: white;
     text-decoration: none;
 }
+
+.item > .active{
+  color: yellow;
+}
