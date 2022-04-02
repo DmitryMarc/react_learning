@@ -2,6 +2,7 @@
 .side__bar{
     grid-area: sb;
     background-color: brown;
+    padding: 20px;
   }
   
 .side__bar > ul{
@@ -15,6 +16,6 @@
     text-decoration: none;
 }
 
-.item > .active{
+.item > a.activeLink{
   color: yellow;
 }
