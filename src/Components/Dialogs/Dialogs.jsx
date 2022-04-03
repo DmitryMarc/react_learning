@@ -1,32 +1,35 @@
-import classes from './Dialogs.module.css'
+import { NavLink } from 'react-router-dom';
+import classes from './Dialogs.module.css';
+
+const DialogItem = (props) => {
+    return (
+        <div className={classes.dialog + ' ' + classes.active}>
+            <NavLink to={'/dialogs/' + props.id}>{props.name}</NavLink>
+        </div>
+    );
+}
+
+const Message = (props) => {
+    return (
+        <div className={classes.dialog}>{props.message}</div>
+    );
+}
 
 const Dialogs =  (props) => {
     return (
         <div className={classes.dialogs}>
             <div className={classes.dialogsItems}>
-                <div className={classes.dialog + ' ' + classes.active}>
-                    Dmitry
-                </div>
-                <div className={classes.dialog}>
-                    Andrey
-                </div>
-                <div className={classes.dialog}>
-                    Sveta
-                </div>
-                <div className={classes.dialog}>
-                    Sasha
-                </div>
-                <div className={classes.dialog}>
-                    Victor
-                </div>
-                <div className={classes.dialog}>
-                    Valery
-                </div>
+                <DialogItem name='Dmitry' id='1' />
+                <DialogItem name='Andrey' id='2' />
+                <DialogItem name='Sveta' id='3' />
+                <DialogItem name='Sasha' id='4' />
+                <DialogItem name='Victor' id='5' />
+                <DialogItem name='Valery' id='6' />
             </div>
             <div className={classes.messages}>
-                <div className={classes.dialog}>Hi</div>
-                <div className={classes.dialog}>How is your learning?</div>
-                <div className={classes.dialog}>React is the best!</div>
+                <Message message='Hi' />
+                <Message message='How is your learning?' />
+                <Message message='React is the best!' />
             </div>
         </div>
     );

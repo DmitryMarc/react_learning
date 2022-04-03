@@ -11,8 +11,9 @@
     color: gold;
 }
 
-.dialog{
-
+.dialog a{
+    color: green;
+    text-decoration: none;
 }
 
 .messages{
