@@ -5,7 +5,7 @@ import Message from './Message/Message';
 
 const Dialogs =  (props) => {
 
-    let state = props.store.getState().dialogsPage;
+    let state = props.dialogsPage;
 
     let dialogs = state.dialogs;
     let messages = state.messages;
@@ -21,12 +21,12 @@ const Dialogs =  (props) => {
     let newMessageBody = state.newMessageBody;
 
     let onSendMessageClick = () => {
-        props.store.dispatch(sendMessageCreator());
+        props.sendMessage();
     }
 
     let onNewMessageChange = (evt) => {
         let body = evt.target.value;
-        props.store.dispatch(updateNewMessageBodyCreator(body));
+        props.updateNewMessageBody(body);
     }
 
     return (
