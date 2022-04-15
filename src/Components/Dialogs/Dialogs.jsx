@@ -1,4 +1,3 @@
-import { sendMessageCreator, updateNewMessageBodyCreator } from '../../Redux/dialogs-reducer';
 import DialogItem from './DialogItem/DialogItem';
 import classes from './Dialogs.module.css';
 import Message from './Message/Message';
