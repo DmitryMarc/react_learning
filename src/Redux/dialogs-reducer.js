@@ -36,7 +36,7 @@ const dialogsReducer = (state = initialState, action) => {
                 messages: [...state.messages, {id: 6, message: body}]
             };
         default:
-            return state;
+            return state;  //Доделать и закомитить
 
     }
 
