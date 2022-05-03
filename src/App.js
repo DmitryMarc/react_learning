@@ -5,7 +5,7 @@ import DialogsContainer from './Components/Dialogs/DialogsContainer';
 import Header from './Components/Header/Header';
 import Music from './Components/Music/Music';
 import News from './Components/News/News';
-import Profile from './Components/Profile/Profile';
+import ProfileContainer from './Components/Profile/ProfileContainer';
 import Settings from './Components/Settings/Settings';
 import SideBar from './Components/Side-bar/Side-bar';
 import UsersContainer from './Components/Users/UsersContainer';
@@ -19,7 +19,7 @@ const App = (props) => {
       <div className='app-wrapper-content'>
         <Routes>
           <Route path='/dialogs/*' element={<DialogsContainer />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/profile/*' element={<ProfileContainer />} />
           <Route path='/users' element={<UsersContainer />} />
           <Route path='/news' element={<News />} />
           <Route path='/music' element={<Music />} />
