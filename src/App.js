@@ -2,7 +2,7 @@ import { renderIntoDocument } from 'react-dom/test-utils';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import DialogsContainer from './Components/Dialogs/DialogsContainer';
-import Header from './Components/Header/Header';
+import HeaderContainer from './Components/Header/HeaderContainer';
 import Music from './Components/Music/Music';
 import News from './Components/News/News';
 import ProfileContainer from './Components/Profile/ProfileContainer';
@@ -14,7 +14,7 @@ import UsersContainer from './Components/Users/UsersContainer';
 const App = (props) => {
   return (
     <div className='app-wrapper'>
-      <Header />
+      <HeaderContainer />
       <SideBar />
       <div className='app-wrapper-content'>
           <Route path='/dialogs' render={() => <DialogsContainer />}/>
