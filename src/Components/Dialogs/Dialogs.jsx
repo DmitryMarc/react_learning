@@ -1,3 +1,4 @@
+import { Redirect } from 'react-router-dom';
 import DialogItem from './DialogItem/DialogItem';
 import classes from './Dialogs.module.css';
 import Message from './Message/Message';
@@ -27,6 +28,9 @@ const Dialogs =  (props) => {
         let body = evt.target.value;
         props.updateNewMessageBody(body);
     }
+    //Защата от неавторизованного пользователя
+    if (!props.isAuth) 
+        return <Redirect to="/login"/>
 
     return (
         <div className={classes.dialogs}>
