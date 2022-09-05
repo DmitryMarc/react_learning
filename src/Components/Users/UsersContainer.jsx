@@ -3,6 +3,7 @@ import { follow, unfollow, setCurrentPageActionCreator,  toggleFollowingProgress
 import React from 'react';
 import Users from './Users';
 import Preloader from '../common/Preloader/Preloader';
+import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 
 
 
@@ -35,29 +36,7 @@ let mapStateToProps = (state) => {
     }
 }
 
-// let mapDispatchToProps = (dispatch) => {
-//     return {
-//         follow: (userId) => {
-//             dispatch(followActionCreator(userId))
-//         },
-//         unfollow: (userId) => {
-//             dispatch(unfollowActionCreator(userId))
-//         },
-//         setUsers: (users) => {
-//             dispatch(setUsersActionCreator(users))
-//         },
-//         setCurrentPage: (pageNumber) => {
-//             dispatch(setCurrentPageActionCreator(pageNumber))
-//         },
-//         setTotalUsersCount: (totalCount) => {
-//             dispatch(setUsersTotalCountActionCreator(totalCount))
-//         },
-//         toggleIsFetching: (isFetching) => {
-//             dispatch(toggleIsFetchingActionCreator(isFetching))
-//         }
-
-//     }
-// }
+let withRedirect = withAuthRedirect(UsersContainer)
 
 export default connect(mapStateToProps, 
     {
@@ -66,5 +45,5 @@ export default connect(mapStateToProps,
         setCurrentPage: setCurrentPageActionCreator,
         toggleFollowingProgress: toggleFollowingProgressActionCreator,
         getUsers: getUsersThunkCreator
-    })(UsersContainer);
+    })(withRedirect);
 

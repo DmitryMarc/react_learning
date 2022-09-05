@@ -11,7 +11,6 @@ import Settings from './Components/Settings/Settings';
 import SideBar from './Components/Side-bar/Side-bar';
 import UsersContainer from './Components/Users/UsersContainer';
 
-
 const App = (props) => {
   return (
     <div className='app-wrapper'>
@@ -32,3 +31,6 @@ const App = (props) => {
 
 
 export default App;
+
+
+
