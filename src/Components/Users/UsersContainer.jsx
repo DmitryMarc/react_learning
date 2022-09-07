@@ -4,8 +4,7 @@ import React from 'react';
 import Users from './Users';
 import Preloader from '../common/Preloader/Preloader';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
-
-
+import { compose } from 'redux';
 
 class UsersContainer extends React.Component {
     componentDidMount() {
@@ -15,7 +14,6 @@ class UsersContainer extends React.Component {
     onPageChanged = (pageNumber) => {
         this.props.getUsers(pageNumber, this.props.pageSize);
     }
-
 
     render() {
         return <>
@@ -36,14 +34,17 @@ let mapStateToProps = (state) => {
     }
 }
 
-let withRedirect = withAuthRedirect(UsersContainer)
+export default compose(
+    connect(mapStateToProps, 
+        {
+            follow,
+            unfollow,
+            setCurrentPage: setCurrentPageActionCreator,
+            toggleFollowingProgress: toggleFollowingProgressActionCreator,
+            getUsers: getUsersThunkCreator
+        }),
+    withAuthRedirect
+)(UsersContainer);
 
-export default connect(mapStateToProps, 
-    {
-        follow,
-        unfollow,
-        setCurrentPage: setCurrentPageActionCreator,
-        toggleFollowingProgress: toggleFollowingProgressActionCreator,
-        getUsers: getUsersThunkCreator
-    })(withRedirect);
+
 

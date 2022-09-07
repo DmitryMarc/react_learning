@@ -1,10 +1,10 @@
-import * as axios from 'axios';
 import React from 'react';
 import { connect } from 'react-redux';
 import Profile from './Profile'; 
-import {Redirect, withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import {getUserProfileThunkCreator} from '../../Redux/profile-reducer';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
+import { compose } from 'redux';
 
 class ProfileContainer extends React.Component {
     componentDidMount(){
@@ -21,8 +21,6 @@ class ProfileContainer extends React.Component {
         );
     }
 }
-                            //вызов HOC
-let AuthRedirectComponent = withAuthRedirect (ProfileContainer);
 
 let mapStateToProps = (state) => {
     return {
@@ -30,8 +28,9 @@ let mapStateToProps = (state) => {
     }
 }
 
-
-let WithUrlDataContainerComponent = withRouter(AuthRedirectComponent);
-
-export default connect(mapStateToProps, 
-    {getUserProfile: getUserProfileThunkCreator})(WithUrlDataContainerComponent);
+export default compose(
+    connect(mapStateToProps, 
+        {getUserProfile: getUserProfileThunkCreator}),
+    withRouter,
+    withAuthRedirect
+)(ProfileContainer);
