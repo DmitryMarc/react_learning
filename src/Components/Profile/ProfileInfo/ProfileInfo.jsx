@@ -15,7 +15,7 @@ const ProfileInfo = (props) => {
                 </div> */}
                 <div className={classes.descriptionBlock}>
                     <img src={props.profile.photos.small} />
-                    <ProfileStatus status={"Hello my friends"} />
+                    <ProfileStatus status={props.status} updateStatus={props.updateStatus} />
                 </div>
             </div>
         </div>
@@ -23,3 +23,6 @@ const ProfileInfo = (props) => {
 }
 
 export default ProfileInfo;
+
+
+
