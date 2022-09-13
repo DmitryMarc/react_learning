@@ -7,7 +7,8 @@ const SideBar = () => {
     return (
         <nav className={classes.side__bar}>
             <ul>
-                <li className={classes.item}><NavLink to='/profile' className = {setActive}>Ptofile</NavLink></li>
+                {/* Временный костыль. Почему-то не перерисовывается при переходе на свой профиль! */}
+                <li className={classes.item}><NavLink to='/profile/23977' className = {setActive}>Ptofile</NavLink></li>
                 <li className={classes.item}><NavLink to='/dialogs' className = {setActive}>Messages</NavLink></li>
                 <li className={classes.item}><NavLink to='/users' className = {setActive}>Users</NavLink></li>
                 <li className={classes.item}><NavLink to='/news' className = {setActive}>News</NavLink></li>
