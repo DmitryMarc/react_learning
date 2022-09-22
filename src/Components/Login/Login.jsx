@@ -3,7 +3,7 @@ import { Field, reduxForm } from "redux-form";
 const LoginForm = (props) => {
     console.log('Rerender');
     return (
-        < form action="" >
+        <form action="" >
             <div>
                 <Field onSubmit={props.handleSubmit} placeholder={"Login"} name={"login"} component={"input"} />
             </div>
@@ -20,7 +20,7 @@ const LoginForm = (props) => {
     )
 }
 
-const LoginReduxForm = reduxForm({form: 'login'})(LoginForm)
+const LoginReduxForm = reduxForm({form: 'login'})(LoginForm);
 
 const Login = (props) => {
     const onSubmit = (formData) => {
@@ -32,7 +32,7 @@ const Login = (props) => {
     </div>
 }
 
-export default Login;
+export default Login;   
 
 
 
