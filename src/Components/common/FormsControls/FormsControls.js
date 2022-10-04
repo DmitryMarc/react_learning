@@ -12,7 +12,6 @@ const FormControl = ({ input, meta, child, element, ...props }) => {
     )
 }
 //element удалить, мы его больше не используем!!!!!!!!!!!!!!!!!!!!!!
-
 export const Textarea = (props) => {
     const { input, meta, child, element, ...restProps } = props;
     return ( 
