@@ -1,3 +1,4 @@
+import { stopSubmit } from "redux-form";
 import { authAPI } from "../api/api";
 
 const SET_USER_DATA = 'SET_USER_DATA';
@@ -7,27 +8,26 @@ let initialState = {
     email: null,
     login: null,
     isAuth: false
-    // isFetching: false
 };
 
 const authReducer = (state = initialState, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case SET_USER_DATA:
             return {
                 ...state,
                 ...action.payload
             };
-        default: 
+        default:
             return state;
     }
 }
 
 export const setAuthUserData = (userId, email, login, isAuth) => (
-    {type: SET_USER_DATA, payload: {userId, email, login, isAuth}});
+    { type: SET_USER_DATA, payload: { userId, email, login, isAuth } });
 export const getAuthUserDataTC = () => (dispatch) => {
     authAPI.me().then(response => {
-        if(response.data.resultCode === 0) {
-            let {id, login, email} = response.data.data;
+        if (response.data.resultCode === 0) {
+            let { id, login, email } = response.data.data;
             dispatch(setAuthUserData(id, email, login, true));
         }
     });
@@ -35,15 +35,24 @@ export const getAuthUserDataTC = () => (dispatch) => {
 
 export const loginTC = (email, password, rememberMe) => (dispatch) => {
     authAPI.login(email, password, rememberMe).then(response => {
-        if(response.data.resultCode === 0) {
+        if (response.data.resultCode === 0) {
             dispatch(getAuthUserDataTC());
+        }
+        else {
+            let message = response.data.messages.length > 0
+            ? response.data.messages[0] 
+            : "Some error";
+            dispatch(stopSubmit("login", {_error: message}));
+            // stopSubmit AC от redux-form (внутри мы говорим, 
+            //что мы стопаем формочку login и указываем проблемное
+            // поле email с описанием проблемы)
         }
     });
 }
 
 export const logoutTC = () => (dispatch) => {
     authAPI.logout().then(response => {
-        if(response.data.resultCode === 0) {
+        if (response.data.resultCode === 0) {
             dispatch(setAuthUserData(null, null, null, false));
         }
     });

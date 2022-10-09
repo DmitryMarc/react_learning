@@ -10,7 +10,8 @@ const instance = axios.create({
 
 export const usersAPI = {
     getUsers(currentPage, pageSize) {
-        return instance.get(`users?page=${currentPage}&count=${pageSize}`).then(response => response.data);
+        return instance.get(`users?page=${currentPage}&count=${pageSize}`)
+            .then(response => response.data);
     },
     follow(userId) {
         return instance.post(`follow/${userId}`);
@@ -19,7 +20,6 @@ export const usersAPI = {
         return instance.delete(`follow/${userId}`);
     },
     getProfile(userId) {
-        // console.worn('Obsolete method. Please use profileAPI object.');
         return profileAPI.getProfile(userId);
     }
 }
@@ -28,22 +28,22 @@ export const profileAPI = {
     getProfile(userId) {
         return instance.get(`profile/` + userId);
     },
-    getStatus(userId){
+    getStatus(userId) {
         return instance.get(`profile/status/` + userId);
     },
-    updateStatus(status){
-        return instance.put(`profile/status`, {status: status});
+    updateStatus(status) {
+        return instance.put(`profile/status`, { status: status });
     }
 }
 
 export const authAPI = {
-    me (){
+    me() {
         return instance.get(`auth/me`);
     },
-    login (email, password, rememberMe = false){
-        return instance.post(`auth/login`, {email, password, rememberMe});
+    login(email, password, rememberMe = false) {
+        return instance.post(`auth/login`, { email, password, rememberMe });
     },
-    logout (){
+    logout() {
         return instance.delete(`auth/login`);
     }
 }
