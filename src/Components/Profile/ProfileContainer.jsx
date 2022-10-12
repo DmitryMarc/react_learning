@@ -11,6 +11,10 @@ class ProfileContainer extends React.Component {
         let userId = this.props.match.params.userId;
         if(!userId){
             userId = this.props.authorizedUserId; //Мой профиль!!!
+            if(!userId){
+                this.props.history.push("/login");
+                //редирект на логин, если нет id юзера (мой id)
+            }
         }
         this.props.getUserProfile(userId);
         this.props.getStatus(userId);
@@ -40,7 +44,6 @@ export default compose(
         updateStatus: updateStatusThunkCreator
         }),
     withRouter
-    // withAuthRedirect
 )(ProfileContainer);
 
 
