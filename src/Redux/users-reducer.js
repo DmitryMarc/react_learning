@@ -60,7 +60,7 @@ const usersReducer = (state = initialState, action) => {
                 ...state,
                 isFetching: action.isFetching
             };
-        case TOGGLE_IS_FOLLOWING_PROGRESS: 
+        case TOGGLE_IS_FOLLOWING_PROGRESS:
             return {
                 ...state,
                 followingInProgress: action.isFetching
@@ -81,8 +81,10 @@ export const setCurrentPageActionCreator = (currentPage) =>
     ({ type: SET_CURRENT_PAGE, currentPage });
 export const setUsersTotalCountActionCreator = (totalUsersCount) =>
     ({ type: SET_TOTAL_USERS_COUNT, count: totalUsersCount });
-export const toggleIsFetchingActionCreator = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching });
-export const toggleFollowingProgressActionCreator = (isFetching, userId) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });
+export const toggleIsFetchingActionCreator = (isFetching) =>
+    ({ type: TOGGLE_IS_FETCHING, isFetching });
+export const toggleFollowingProgressActionCreator = (isFetching, userId) =>
+    ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });
 
 //ThunkCreator
 export const requestUsersThunkCreator = (page, pageSize) => {

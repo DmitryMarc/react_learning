@@ -1,6 +1,14 @@
-export const getUsers = (state) => {
+import { createSelector } from "reselect";
+
+const  getUsersSelector = (state) => {
     return state.usersPage.users;
 }
+
+// Для примера создан более сложный селектор, который находится в
+// зависимости от менее сложного (примитивного) селектора
+export const  getUsers = createSelector(getUsersSelector, (users) => {
+    return users.filter(user => true);
+});
 
 export const getPageSize = (state) => {
     return state.usersPage.pageSize;
