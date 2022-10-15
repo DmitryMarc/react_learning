@@ -4,8 +4,7 @@ const  getUsersSelector = (state) => {
     return state.usersPage.users;
 }
 
-// Для примера создан более сложный селектор, который находится в
-// зависимости от менее сложного (примитивного) селектора
+// Для примера создан более сложный селектор, который находится в зависимости от менее сложного (примитивного) селектора
 export const  getUsers = createSelector(getUsersSelector, (users) => {
     return users.filter(user => true);
 });
