@@ -5,10 +5,19 @@ import { Field, reduxForm } from 'redux-form';
 import { maxLengthCreator, required } from '../../../utils/validators/validators';
 import { Textarea } from '../../common/FormsControls/FormsControls';
 
-const MyPosts = (props) => {
+const MyPosts = React.memo( props => {
+    // componentDidMount(){
+    //     setTimeout(() => {
+    //         this.setState({a:12})
+    //     }, 3000)
+    // }
+
+    // shouldComponentUpdate(nextProps, nextState){
+    //     return nextProps != this.props || nextState != this.state;
+    // }
+    console.log("RENDER YO");
 
     let postsData = props.posts;
-
     let postsElements = postsData.map(post =>
         <Post message={post.message} likesCount={post.likesCount} />
     );
@@ -27,17 +36,19 @@ const MyPosts = (props) => {
                 {postsElements}
             </div>
         </div>
-    );
-}
+    )
+});
 
 const maxLengt10 = maxLengthCreator(10)
 
-let AddNewPostForm  = (props) => {
+let AddNewPostForm = (props) => {
     return (
         <form onSubmit={props.handleSubmit}>
             <div>
-                <Field component={Textarea} placeholder={"Post message"} name="newPostText" validate={[required, maxLengt10]} />
-                {/* <textarea onChange={onPostChange} name="" ref={newPostElement} cols="30" rows="10" value={props.newPostText} /> */}
+                <Field component={Textarea} placeholder={"Post message"} 
+                name="newPostText" validate={[required, maxLengt10]} />
+                {/* <textarea onChange={onPostChange} name="" ref={newPostElement} 
+                cols="30" rows="10" value={props.newPostText} /> */}
             </div>
             <div>
                 <button>Add post</button>
