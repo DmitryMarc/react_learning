@@ -1,4 +1,5 @@
 import { usersAPI } from "../api/api";
+import { updateObjectInArray } from "../utils/object-helpers";
 
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
@@ -22,23 +23,25 @@ const usersReducer = (state = initialState, action) => {
         case FOLLOW:
             return {
                 ...state,
-                users: state.users.map(user => {
-                    if (user.id === action.userId) {
-                        return { ...user, followed: true }
-                    }
-                    return user;
-                })
+                users: updateObjectInArray(state.users, action.userId, "id", { followed: true })
+                //     users: state.users.map(user => {
+                //         if (user.id === action.userId) {
+                //             return { ...user, followed: true }
+                //         }
+                //         return user;
+                //     })
             };
 
         case UNFOLLOW:
             return {
                 ...state,
-                users: state.users.map(user => {
-                    if (user.id === action.userId) {
-                        return { ...user, followed: false }
-                    }
-                    return user;
-                })
+                users: updateObjectInArray(state.users, action.userId, "id", { followed: false })
+                // users: state.users.map(user => {
+                //     if (user.id === action.userId) {
+                //         return { ...user, followed: false }
+                //     }
+                //     return user;
+                // })
             };
         case SET_USERS:
             return {
@@ -89,44 +92,43 @@ export const toggleFollowingProgressActionCreator = (isFetching, userId) =>
 //ThunkCreator
 export const requestUsersThunkCreator = (page, pageSize) => {
     //return Thunk
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch(toggleIsFetchingActionCreator(true));
         dispatch(setCurrentPageActionCreator(page));
 
-        usersAPI.getUsers(page, pageSize).then(data => {
-            dispatch(toggleIsFetchingActionCreator(false));
-            dispatch(setUsersActionCreator(data.items));
-            dispatch(setUsersTotalCountActionCreator(data.totalCount));
-        });
+        let data = await usersAPI.getUsers(page, pageSize);
+        dispatch(toggleIsFetchingActionCreator(false));
+        dispatch(setUsersActionCreator(data.items));
+        dispatch(setUsersTotalCountActionCreator(data.totalCount));
     }
+}
+
+const followUnfollowFlow = async (dispatch, userId, apiMethod, actionCreator) => {
+    dispatch(toggleFollowingProgressActionCreator(true, userId));
+    let response = await apiMethod(userId);
+
+    if (response.data.resultCode === 0) {
+        dispatch(actionCreator(userId));
+    }
+    dispatch(toggleFollowingProgressActionCreator(false, userId));
 }
 
 //ThunkCreator
 export const follow = (userId) => {
     //return Thunk
-    return (dispatch) => {
-        dispatch(toggleFollowingProgressActionCreator(true, userId));
-        usersAPI.follow(userId).then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(followSuccessActionCreator(userId));
-            }
-            dispatch(toggleFollowingProgressActionCreator(false, userId));
-        });
+    return async (dispatch) => {
+        let apiMethod = usersAPI.follow.bind(usersAPI);
+        let actionCreator = followSuccessActionCreator;
+        followUnfollowFlow(dispatch, userId, apiMethod, actionCreator);
     }
 }
-
 
 //ThunkCreator
 export const unfollow = (userId) => {
     //return Thunk
-    return (dispatch) => {
-        dispatch(toggleFollowingProgressActionCreator(true, userId));
-        usersAPI.unfollow(userId).then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(unfollowSuccessActionCreator(userId));
-            }
-            dispatch(toggleFollowingProgressActionCreator(false, userId));
-        });
+    return async (dispatch) => {
+        //аналог предыдущей санки, но без использования переменных
+        followUnfollowFlow(dispatch, userId, usersAPI.unfollow.bind(usersAPI), unfollowSuccessActionCreator);
     }
 }
 

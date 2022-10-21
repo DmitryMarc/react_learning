@@ -1,28 +1,25 @@
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import { required } from "../../utils/validators/validators";
-import { Input } from "../common/FormsControls/FormsControls";
+import { createField, Input } from "../common/FormsControls/FormsControls";
 import { loginTC } from "../../Redux/auth-reducer";
 import { Redirect } from "react-router-dom";
 import style from "./../common/FormsControls/FormsControls.module.css";
 
-const LoginForm = (props) => {
+const LoginForm = ({handleSubmit, error}) => {
     return (
-        <form onSubmit={props.handleSubmit}>
-            <div>
-                <Field placeholder={"Email"} validate={[required]}
-                    name={"email"} component={Input} />
-            </div>
-            <div>
-                <Field placeholder={"Password"} type={"password"}
-                    validate={[required]} name={"password"} component={Input} />
-            </div>
-            <div>
-                <Field type={"checkbox"} name={"rememderMe"}
-                    component={Input} /> rememder me
-            </div>
-            {props.error && <div className={style.formSummaryError}>
-                {props.error}
+        <form onSubmit={handleSubmit}>
+                {createField("Email", "email", [required], Input)}
+                {/* <Field placeholder={"Email"} validate={[required]}
+                    name={"email"} component={Input} /> */}
+                {createField("Password", "password", [required], Input, {type: "password"})}
+                {/* <Field placeholder={"Password"} type={"password"}
+                    validate={[required]} name={"password"} component={Input} /> */}
+                {createField(null, "rememderMe", [], Input, {type: "checkbox"}, "rememder me")}
+                {/* <Field type={"checkbox"} name={"rememderMe"}
+                    component={Input} /> rememder me */}
+            {error && <div className={style.formSummaryError}>
+                {error}
             </div>
             }
             <div>

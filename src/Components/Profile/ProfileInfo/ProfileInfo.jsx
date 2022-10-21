@@ -3,21 +3,18 @@ import classes from './ProfileInfo.module.css';
 //import ProfileStatus from './ProfileStatus';
 import ProfileStatusWithHooks from './ProfileStatusWithHooks';
 
-const ProfileInfo = (props) => {
-    if (!props.profile) {
+const ProfileInfo = ({profile, status, updateStatus}) => {
+    if (!profile) {
         return <Preloader />
     }
 
     return (
         <div>
             <div>
-                {/* <div>
-                    <img src='https://widewp.ru/images/nature/199.jpg' />
-                </div> */}
                 <div className={classes.descriptionBlock}>
-                    <img src={props.profile.photos.small} />
-                    <ProfileStatusWithHooks status={props.status}
-                        updateStatus={props.updateStatus} />
+                    <img src={profile.photos.small} />
+                    <ProfileStatusWithHooks status={status}
+                        updateStatus={updateStatus} />
                 </div>
             </div>
         </div>
