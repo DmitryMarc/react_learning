@@ -5,16 +5,18 @@ import { BrowserRouter, Route, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import './App.css';
 import Preloader from './Components/common/Preloader/Preloader';
-import DialogsContainer from './Components/Dialogs/DialogsContainer';
 import HeaderContainer from './Components/Header/HeaderContainer';
 import LoginPage from './Components/Login/Login';
 import Music from './Components/Music/Music';
 import News from './Components/News/News';
-import ProfileContainer from './Components/Profile/ProfileContainer';
 import Settings from './Components/Settings/Settings';
 import SideBar from './Components/Side-bar/Side-bar';
 import UsersContainer from './Components/Users/UsersContainer';
 import { initializeAppTC } from './Redux/app-reducer';
+import { withSuspense } from './hoc/withSuspense';
+
+const DialogsContainer = React.lazy(() => import('./Components/Dialogs/DialogsContainer'));
+const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
 
 class App extends Component {
   componentDidMount() {
@@ -29,8 +31,8 @@ class App extends Component {
         <HeaderContainer />
         <SideBar />
         <div className='app-wrapper-content'>
-          <Route path='/dialogs' render={() => <DialogsContainer />} />
-          <Route path='/profile/:userId?' render={() => <ProfileContainer />} />
+          <Route path='/dialogs' render={withSuspense(DialogsContainer)} />
+          <Route path='/profile/:userId?' render={withSuspense(ProfileContainer)} />
           <Route path='/users' render={() => <UsersContainer />} />
           <Route path='/news' render={() => <News />} />
           <Route path='/music' render={() => <Music />} />
