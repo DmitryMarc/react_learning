@@ -12,7 +12,7 @@ describe("ProfileStatus component", () => {
   test("after creation <span></span> should be displayed", () => {
     const component = create(<ProfileStatus status="it-kamasutra.com" />);
     const root = component.root;
-    let span = root.findAllByType("span");
+    let span = root.findByType("span");
     expect(span.length).not.toBeNull();
   });
 
