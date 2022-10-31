@@ -1,3 +1,4 @@
+import { stopSubmit } from "redux-form";
 import { profileAPI, usersAPI } from "../api/api";
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
@@ -52,7 +53,7 @@ const profileReducer = (state = initialState, action) => {
         case SAVE_PHOTO_SUCCESS: {
             return {
                 ...state,
-                profile: {...state.profile, photos: action.photos}
+                profile: { ...state.profile, photos: action.photos }
             }
         }
         default:
@@ -90,8 +91,21 @@ export const updateStatusThunkCreator = (status) => async (dispatch) => {
 export const savePhotoThunkCreator = (file) => async (dispatch) => {
     const response = await profileAPI.savePhoto(file);
     if (response.data.resultCode === 0) {
-       dispatch(savePhotoSuccessActionCreator(response.data.data.photos));
+        dispatch(savePhotoSuccessActionCreator(response.data.data.photos));
     }
 };
+
+export const saveProfileThunkCreator = (profile) => async (dispatch, getState) => {
+    const userId = getState().auth.userId;
+    const response = await profileAPI.saveProfile(profile);
+    if (response.data.resultCode === 0) {
+        dispatch(getUserProfileThunkCreator(userId));
+    } else {
+        dispatch(stopSubmit("edit-profile", { _error: response.data.messages[0] }));
+        // dispatch(stopSubmit("edit-profile", { "contacts": {"facebook": response.data.messages[0]} }));
+        // необходимо распарсить ошибку для каждого случая (выглядеть должно примерно так, но у нас hardcode)
+        return Promise.reject(response.data.messages[0]);
+    }
+}
 
 export default profileReducer;
