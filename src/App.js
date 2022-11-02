@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import store from './Redux/redux-store';
 import { connect, Provider } from 'react-redux';
-import { HashRouter, Route, withRouter } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import './App.css';
 import Preloader from './Components/common/Preloader/Preloader';
@@ -19,9 +19,19 @@ const DialogsContainer = React.lazy(() => import('./Components/Dialogs/DialogsCo
 const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
 
 class App extends Component {
+  catchAllUnhandledErrors = (reason, promise) => {
+    alert("Some error occured");
+    //console.error(promiseRejectionEvent);
+  }
   componentDidMount() {
     this.props.initializeApp();
+    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors );
   }
+
+  componentWillUnmount(){
+    window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors );
+  }
+
   render() {
     if (!this.props.initialized) {
       return <Preloader />
@@ -31,6 +41,7 @@ class App extends Component {
         <HeaderContainer />
         <SideBar />
         <div className='app-wrapper-content'>
+          <Route path='/' render={() => <Redirect to="/profile" />} />
           <Route path='/dialogs' render={withSuspense(DialogsContainer)} />
           <Route path='/profile/:userId?' render={withSuspense(ProfileContainer)} />
           <Route path='/users' render={() => <UsersContainer />} />
@@ -54,11 +65,11 @@ let AppContainer = compose(
 
 const ReactJSApp = (props) => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Provider store={store}>
         <AppContainer />
       </Provider>
-    </HashRouter>
+    </BrowserRouter>
   )
 }
 
