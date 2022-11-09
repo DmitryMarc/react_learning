@@ -40,7 +40,6 @@ const dialogsReducer = (state = initialState, action:any):InitialStateType => {
             };
         default:
             return state;
-
     }
 
 }

@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
+// Ts не видит файлы с отличными от ts, tsx расширениями (.css, .scss, .sass, .png, .jpeg и т.д.). Мы задекларированали расширение шайлов в "declaration.d.ts" Также можно временно игнорировать ошибку.
 import styles from './Paginator.module.css';
 
-let Paginator = ({ totalItemsCount, pageSize, currentPage, onPageChanged, portionSize = 10 }) => {
+type PropsType = { 
+    totalItemsCount: number, 
+    pageSize: number, 
+    currentPage: number, 
+    onPageChanged: (pageNumber:number) => void, 
+    portionSize?: number 
+}
+
+let Paginator:React.FC<PropsType> = ({ totalItemsCount, pageSize, currentPage, onPageChanged, portionSize = 10 }) => {
 
     let pagesCount = Math.ceil(totalItemsCount / pageSize);
 
-    let pages = [];
+    let pages: Array<number> = [];
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i);
     }
 
     let portionCount = Math.ceil(pagesCount / portionSize); // Количество страниц / размер порции = количество порций страниц
     let [portionNumber, setPortionNumber] = useState(1);
+
     let leftPortionPageNumber = (portionNumber - 1) * portionSize + 1; // Минимальная граница порции 
     //(порядковый номер первого элемента порции) = (номер текущей страницы - 1) * размер порции(кол-во элементов порции) + 1
     let rightPortionPageNumber = portionNumber * portionSize; //номер текущей страницы * размер порции 

@@ -41,10 +41,11 @@ class App extends Component {
         <HeaderContainer />
         <SideBar />
         <div className='app-wrapper-content'>
-          <Route path='/' render={() => <Redirect to="/profile" />} />
+          {/* если пользователь залогинен, то нужно при инициализации приложения направлять на его профиль(его id)*/}
+          <Route path='/' render={() => <Redirect to="/profile" />} />        
           <Route path='/dialogs' render={withSuspense(DialogsContainer)} />
           <Route path='/profile/:userId?' render={withSuspense(ProfileContainer)} />
-          <Route path='/users' render={() => <UsersContainer />} />
+          <Route path='/users' render={() => <UsersContainer pageTitle={"Пользователи"} />} />
           <Route path='/news' render={() => <News />} />
           <Route path='/music' render={() => <Music />} />
           <Route path='/settings' render={() => <Settings />} />

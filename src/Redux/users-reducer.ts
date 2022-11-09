@@ -98,11 +98,11 @@ type SetUsersTotalCountActionType = {
 export const setUsersTotalCountActionCreator = (totalUsersCount:number): SetUsersTotalCountActionType =>
     ({ type: SET_TOTAL_USERS_COUNT, count: totalUsersCount });
 
-type ToggleIsFetchingActiontype = {
+type ToggleIsFetchingActionType = {
     type: typeof TOGGLE_IS_FETCHING, 
     isFetching: boolean
 }
-export const toggleIsFetchingActionCreator = (isFetching:boolean): ToggleIsFetchingActiontype =>
+export const toggleIsFetchingActionCreator = (isFetching:boolean): ToggleIsFetchingActionType =>
     ({ type: TOGGLE_IS_FETCHING, isFetching });
 
 type ToggleFollowingProgressActionType = {
