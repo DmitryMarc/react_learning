@@ -44,7 +44,7 @@ const dialogsReducer = (state = initialState, action:SendMessageCreatorActionTyp
 
 }
 
-type SendMessageCreatorActionType = {
+export type SendMessageCreatorActionType = {
     type: typeof SEND_MESSAGE, 
     newMessageBody: string
 }
