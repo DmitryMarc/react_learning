@@ -1,6 +1,8 @@
 import { PostType, ProfileType, PhotosType } from './../types/types';
 import { stopSubmit } from "redux-form";
 import { profileAPI, usersAPI } from "../api/api";
+import { ThunkAction } from 'redux-thunk';
+import { AppStateType } from './redux-store';
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
@@ -21,7 +23,7 @@ let initialState = {
 
 export type InitialStateType = typeof initialState;
 
-const profileReducer = (state = initialState, action:any):InitialStateType => {
+const profileReducer = (state = initialState, action:ActionsTypes):InitialStateType => {
 
     switch (action.type) {
         case ADD_POST: {
@@ -65,6 +67,10 @@ const profileReducer = (state = initialState, action:any):InitialStateType => {
     }
 }
 
+type ActionsTypes = AddPostActionType | SetUserProfileActionType | 
+SetStatusActionType | DeletePostActionType | 
+SavePhotoSuccessActionType;
+
 type AddPostActionType = { 
     type: typeof ADD_POST, 
     newPostText: string 
@@ -93,17 +99,19 @@ type SavePhotoSuccessActionType = {
 };
 export const savePhotoSuccessActionCreator = (photos:PhotosType):SavePhotoSuccessActionType => ({ type: SAVE_PHOTO_SUCCESS, photos });
 
-export const getUserProfileThunkCreator = (userId:number) => async (dispatch:any) => {
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
+
+export const getUserProfileThunkCreator = (userId:number):ThunkType => async (dispatch) => {
     const response = await usersAPI.getProfile(userId)
     dispatch(setUserProfileActionCreator(response.data));
 };
 
-export const getStatusThunkCreator = (userId:number) => async (dispatch:any) => {
+export const getStatusThunkCreator = (userId:number):ThunkType => async (dispatch) => {
     const response = await profileAPI.getStatus(userId);
     dispatch(setStatusActionCreator(response.data));
 };
 
-export const updateStatusThunkCreator = (status:string) => async (dispatch:any) => {
+export const updateStatusThunkCreator = (status:string):ThunkType => async (dispatch) => {
     try { // пробуем это выпонять
         const response = await profileAPI.updateStatus(status);
         if (response.data.resultCode === 0) {
@@ -114,19 +122,21 @@ export const updateStatusThunkCreator = (status:string) => async (dispatch:any) 
     }
 };
 
-export const savePhotoThunkCreator = (file:any) => async (dispatch:any) => {
+export const savePhotoThunkCreator = (file:any):ThunkType => async (dispatch) => {
     const response = await profileAPI.savePhoto(file);
     if (response.data.resultCode === 0) {
         dispatch(savePhotoSuccessActionCreator(response.data.data.photos));
     }
 };
 
-export const saveProfileThunkCreator = (profile:ProfileType) => async (dispatch:any, getState:any) => {
+export const saveProfileThunkCreator = (profile:ProfileType):ThunkType => async (dispatch, getState) => {
     const userId = getState().auth.userId;
     const response = await profileAPI.saveProfile(profile);
     if (response.data.resultCode === 0) {
+        // @ts-ignore
         dispatch(getUserProfileThunkCreator(userId));
     } else {
+        // @ts-ignore
         dispatch(stopSubmit("edit-profile", { _error: response.data.messages[0] }));
         // dispatch(stopSubmit("edit-profile", { "contacts": {"facebook": response.data.messages[0]} }));
         // необходимо распарсить ошибку для каждого случая (выглядеть должно примерно так, но у нас hardcode)

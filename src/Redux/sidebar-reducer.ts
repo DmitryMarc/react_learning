@@ -1,8 +1,10 @@
 let initialState = {};
+type InitialStateType = typeof initialState;
 
-const sidebarReducer = (state = initialState, action:any) => {
+const sidebarReducer = (state = initialState, action:ActionsTypes):InitialStateType => {
     return state;
 }
-type InitialStateType = typeof initialState;
+
+type ActionsTypes = any;
 
 export default sidebarReducer;

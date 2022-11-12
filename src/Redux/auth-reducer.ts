@@ -1,5 +1,7 @@
 import { stopSubmit } from "redux-form";
+import { ThunkAction } from "redux-thunk";
 import { authAPI, securityAPI } from "../api/api";
+import { AppStateType } from "./redux-store";
 
 const SET_USER_DATA = 'auth/SET_USER_DATA';
 const GET_CAPTCHA_URL = 'auth/GET_CAPTCHA_URL';
@@ -14,7 +16,7 @@ let initialState = {
 
 type InitialStateType = typeof initialState;
 
-const authReducer = (state = initialState, action:any): InitialStateType => {
+const authReducer = (state = initialState, action:ActionsTypes): InitialStateType => {
     switch (action.type) {
         case SET_USER_DATA:
         case GET_CAPTCHA_URL:
@@ -26,6 +28,8 @@ const authReducer = (state = initialState, action:any): InitialStateType => {
             return state;
     }
 }
+
+type ActionsTypes = SetAuthUserDataActionType | GetCaptchaUrlSuccessActionType;
 
 type SetAuthUserDataActionPayloadType = {
     userId: number | null, 
@@ -52,7 +56,9 @@ type GetCaptchaUrlSuccessActionType = {
 export const getCaptchaUrlSuccess = (captchaUrl:string):GetCaptchaUrlSuccessActionType => (
     { type: GET_CAPTCHA_URL, payload: { captchaUrl } });
 
-export const getAuthUserDataTC = () => async (dispatch:any) => {
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
+
+export const getAuthUserDataTC = ():ThunkType => async (dispatch) => {
     let response = await authAPI.me();
     if (response.data.resultCode === 0) {
         let { id, login, email } = response.data.data;
@@ -60,7 +66,7 @@ export const getAuthUserDataTC = () => async (dispatch:any) => {
     }
 }
 
-export const loginTC = (email: string, password: string, rememberMe:boolean, captcha: string) => async (dispatch:any) => {
+export const loginTC = (email: string, password: string, rememberMe:boolean, captcha: string):ThunkType => async (dispatch) => {
     let response = await authAPI.login(email, password, rememberMe, captcha);
     if (response.data.resultCode === 0) {
         dispatch(getAuthUserDataTC());
@@ -72,6 +78,7 @@ export const loginTC = (email: string, password: string, rememberMe:boolean, cap
         let message = response.data.messages.length > 0
             ? response.data.messages[0]
             : "Some error";
+        // @ts-ignore
         dispatch(stopSubmit("login", { _error: message }));
         // stopSubmit AC от redux-form (внутри мы говорим, 
         //что мы стопаем формочку login и указываем проблемное
@@ -79,13 +86,13 @@ export const loginTC = (email: string, password: string, rememberMe:boolean, cap
     }
 }
 
-export const getCaptchaUrlTC = () => async (dispatch: any) => {
+export const getCaptchaUrlTC = ():ThunkType => async (dispatch) => {
     const response = await securityAPI.getCaptchaUrl();
     const captchaUrl = response.data.url;
     dispatch(getCaptchaUrlSuccess(captchaUrl));
 }
 
-export const logoutTC = () => async (dispatch: any) => {
+export const logoutTC = ():ThunkType => async (dispatch) => {
     let response = await authAPI.logout();
     if (response.data.resultCode === 0) {
         dispatch(setAuthUserData(null, null, null, false, null));
