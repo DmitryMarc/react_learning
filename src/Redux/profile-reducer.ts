@@ -1,6 +1,6 @@
 import { PostType, ProfileType, PhotosType } from './../types/types';
 import { stopSubmit } from "redux-form";
-import { profileAPI, usersAPI } from "../api/api";
+import { profileAPI, ResultCodesEnum, usersAPI } from "../api/api";
 import { ThunkAction } from 'redux-thunk';
 import { AppStateType } from './redux-store';
 const ADD_POST = 'ADD-POST';
@@ -102,19 +102,19 @@ export const savePhotoSuccessActionCreator = (photos:PhotosType):SavePhotoSucces
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>
 
 export const getUserProfileThunkCreator = (userId:number):ThunkType => async (dispatch) => {
-    const response = await usersAPI.getProfile(userId)
-    dispatch(setUserProfileActionCreator(response.data));
+    const responseData = await usersAPI.getProfile(userId)
+    dispatch(setUserProfileActionCreator(responseData));
 };
 
 export const getStatusThunkCreator = (userId:number):ThunkType => async (dispatch) => {
-    const response = await profileAPI.getStatus(userId);
-    dispatch(setStatusActionCreator(response.data));
+    const responseData = await profileAPI.getStatus(userId);
+    dispatch(setStatusActionCreator(responseData));
 };
 
 export const updateStatusThunkCreator = (status:string):ThunkType => async (dispatch) => {
     try { // пробуем это выпонять
-        const response = await profileAPI.updateStatus(status);
-        if (response.data.resultCode === 0) {
+        const responseData = await profileAPI.updateStatus(status);
+        if (responseData.resultCode === ResultCodesEnum.Success) {
             dispatch(setStatusActionCreator(status));
         }
     } catch (error) { //но если поймали ошибку, то выполнить ....
@@ -123,16 +123,16 @@ export const updateStatusThunkCreator = (status:string):ThunkType => async (disp
 };
 
 export const savePhotoThunkCreator = (file:any):ThunkType => async (dispatch) => {
-    const response = await profileAPI.savePhoto(file);
-    if (response.data.resultCode === 0) {
-        dispatch(savePhotoSuccessActionCreator(response.data.data.photos));
+    const responseData = await profileAPI.savePhoto(file);
+    if (responseData.resultCode === ResultCodesEnum.Success) {
+        dispatch(savePhotoSuccessActionCreator(responseData.data));
     }
 };
 
 export const saveProfileThunkCreator = (profile:ProfileType):ThunkType => async (dispatch, getState) => {
     const userId = getState().auth.userId;
-    const response = await profileAPI.saveProfile(profile);
-    if (response.data.resultCode === 0) {
+    const responseData = await profileAPI.saveProfile(profile);
+    if (responseData.resultCode === ResultCodesEnum.Success) {
         // @ts-ignore
         dispatch(getUserProfileThunkCreator(userId));
     } else {
@@ -140,7 +140,7 @@ export const saveProfileThunkCreator = (profile:ProfileType):ThunkType => async 
         dispatch(stopSubmit("edit-profile", { _error: response.data.messages[0] }));
         // dispatch(stopSubmit("edit-profile", { "contacts": {"facebook": response.data.messages[0]} }));
         // необходимо распарсить ошибку для каждого случая (выглядеть должно примерно так, но у нас hardcode)
-        return Promise.reject(response.data.messages[0]);
+        return Promise.reject(responseData.messages[0]);
     }
 }
 
