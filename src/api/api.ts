@@ -117,7 +117,6 @@ export const securityAPI = {
     }
 }
 
-
 // authAPI.me().then((res:AxiosResponse<number>) => res.data.)
 
 // instance.get(`auth/me`).then((res:AxiosResponse<string>) => res.data.toUpperCase())
