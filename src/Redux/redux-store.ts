@@ -21,9 +21,9 @@ let rootReducer = combineReducers({
 type RootReducerType = typeof rootReducer;
 export type AppStateType = ReturnType<RootReducerType>;
 
-//let state:AppStateType;
-// state.dialogsPage.messages;
-// state.dialogsPage.users.push(); // нет users в dealogs
+type PropertiesTypes<T> = T extends {[key:string]:infer U} ? U : never
+
+export type InferActionsTypes<T extends {[key:string]:(...arg: any[]) => any}> = ReturnType<PropertiesTypes<T>>
 
 // @ts-ignore // игнорирования ts-компилятором
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

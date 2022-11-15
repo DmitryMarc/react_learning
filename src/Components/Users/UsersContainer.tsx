@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import {
-    follow, unfollow, setCurrentPageActionCreator,
-    toggleFollowingProgressActionCreator,
+    follow, unfollow,
     requestUsersThunkCreator
 } from '../../Redux/users-reducer';
 import React from 'react';
@@ -78,11 +77,8 @@ export default compose(
     //TStateProps = {}, TDispatchProps = {}, TOwnProps = {}, State = DefaultState // Обязательно соблюдать сигнатуру и порядок типов!
     connect<MapStatePropsType, MapDispatchPropsType, OwnPropsType, AppStateType>(mapStateToProps,
         {
-            //followyo: follow, пройдёт без ошибок
             follow,
             unfollow,
-            // setCurrentPage: setCurrentPageActionCreator,
-            // toggleFollowingProgress: toggleFollowingProgressActionCreator,
             getUsers: requestUsersThunkCreator
         })
 )(UsersContainer);
