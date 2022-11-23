@@ -9,7 +9,7 @@ import { FC } from "react";
 import { AppStateType } from "../../Redux/redux-store";
 
 type LoginFormOwnProps = {
-    captchaUrl: string | null
+    captchaUrl: string | null | undefined
 }
 
 const LoginForm:FC<InjectedFormProps<LoginFormValuesType, LoginFormOwnProps> & LoginFormOwnProps> = ({handleSubmit, error, captchaUrl}) => {
@@ -36,7 +36,7 @@ const LoginForm:FC<InjectedFormProps<LoginFormValuesType, LoginFormOwnProps> & L
 const LoginReduxForm = reduxForm<LoginFormValuesType, LoginFormOwnProps>({ form: 'login' })(LoginForm);
 
 type MapStatePropsType = {
-    captchaUrl: string | null,
+    captchaUrl: string | null | undefined,
     isAuth: boolean
 }
 

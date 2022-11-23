@@ -1,5 +1,4 @@
-import profileReducer, { addPostActionCreator, 
-  deletePostActionCreator } from "./profile-reducer";
+import profileReducer, { actions } from "./profile-reducer";
 
 let state = {
     postsData: [
@@ -7,12 +6,15 @@ let state = {
         { id: 2, message: 'It\'s my first post', likesCount: 20 },
         { id: 3, message: 'It\'s my second post', likesCount: 21 },
         { id: 4, message: 'It\'s my coolest post', likesCount: 4 }
-    ]
+    ],
+    profile: null,
+    status: '',
+    newPostText: ''
 }
 //1
 test('message of new post should be correct', () => {
     //1. test data
-    let action = addPostActionCreator("it-kamasutra.com");
+    let action = actions.addPostActionCreator("it-kamasutra.com");
     //2. action (создаём экшн)
     let newState = profileReducer(state, action); 
     //3. expectation (ожидания, ожидаемый результат)
@@ -21,7 +23,7 @@ test('message of new post should be correct', () => {
 //2
   test('length of posts should be incremented', () => {
     //1. test data
-    let action = addPostActionCreator("it-kamasutra.com");
+    let action = actions.addPostActionCreator("it-kamasutra.com");
     //2. action (создаём экшн)
     let newState = profileReducer(state, action); 
     //3. expectation (ожидания, ожидаемый результат)
@@ -30,7 +32,7 @@ test('message of new post should be correct', () => {
 //3
   test('after deleting length of message should be decrement', () => {
     //1. test data
-    let action = deletePostActionCreator(1);
+    let action = actions.deletePostActionCreator(1);
     //2. action (создаём экшн)
     let newState = profileReducer(state, action); 
     //3. expectation (ожидания, ожидаемый результат)
@@ -40,7 +42,7 @@ test('message of new post should be correct', () => {
   test(`after deleting length of message shouldn't 
   be decrement if id is incorrect`, () => {
     //1. test data
-    let action = deletePostActionCreator(1000);
+    let action = actions.deletePostActionCreator(1000);
     //2. action (создаём экшн)
     let newState = profileReducer(state, action); 
     //3. expectation (ожидания, ожидаемый результат)
