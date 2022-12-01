@@ -58,7 +58,6 @@ export const loginTC = (email: string, password: string, rememberMe:boolean, cap
         let message = loginData.messages.length > 0
             ? loginData.messages[0]
             : "Some error";
-        // @ts-ignore
         dispatch(stopSubmit("login", { _error: message }));
         // stopSubmit AC от redux-form (внутри мы говорим, 
         //что мы стопаем формочку login и указываем проблемное

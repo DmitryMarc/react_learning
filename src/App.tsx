@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import store from './Redux/redux-store';
+import React, { Component, ComponentType, FC } from 'react';
+import store, { AppStateType } from './Redux/redux-store';
 import { connect, Provider } from 'react-redux';
 import { BrowserRouter, Redirect, Route, withRouter } from 'react-router-dom';
 import { compose } from 'redux';
@@ -18,19 +18,27 @@ import { withSuspense } from './hoc/withSuspense';
 const DialogsContainer = React.lazy(() => import('./Components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
 
-class App extends Component {
-  // catchAllUnhandledErrors = (reason, promise) => {
-  //   alert("Some error occured");
-  //   //console.error(promiseRejectionEvent);
-  // }
+type MapPropsType = ReturnType<typeof mapStateToProps>;
+type DispatchPropsType = {
+  initializeApp: () => void
+};
+
+const SuspendedDialogs = withSuspense(DialogsContainer);
+const SuspendedProfile = withSuspense(ProfileContainer);
+
+class App extends Component<MapPropsType & DispatchPropsType> {
+  catchAllUnhandledErrors = (e: PromiseRejectionEvent) => {
+    alert("Some error occured");
+    //console.error(promiseRejectionEvent);
+  }
   componentDidMount() {
     this.props.initializeApp();
-    // window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors );
+    window.addEventListener("unhandledrejection", this.catchAllUnhandledErrors );
   }
 
-  // componentWillUnmount(){
-  //   window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors ); // глобальный отлов promise
-  // }
+  componentWillUnmount(){
+    window.removeEventListener("unhandledrejection", this.catchAllUnhandledErrors ); // глобальный отлов promise
+  }
 
   render() {
     if (!this.props.initialized) {
@@ -43,8 +51,8 @@ class App extends Component {
         <div className='app-wrapper-content'>
           {/* если пользователь залогинен, то нужно при инициализации приложения направлять на его профиль(его id)*/}
           <Route path='/' render={() => <Redirect to="/profile" />} />        
-          <Route path='/dialogs' render={withSuspense(DialogsContainer)} />
-          <Route path='/profile/:userId?' render={withSuspense(ProfileContainer)} />
+          <Route path='/dialogs' render={() => <SuspendedDialogs />} />
+          <Route path='/profile/:userId?' render={() => <SuspendedProfile />} />
           <Route path='/users' render={() => <UsersContainer pageTitle={"Пользователи"} />} />
           <Route path='/news' render={() => <News />} />
           <Route path='/music' render={() => <Music />} />
@@ -56,15 +64,15 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: AppStateType) => ({
   initialized: state.app.initialized
 })
-let AppContainer = compose(
+let AppContainer = compose<ComponentType>(
   withRouter,
   connect(mapStateToProps, { initializeApp: initializeAppTC }))
   (App);
 
-const ReactJSApp = (props) => {
+const ReactJSApp:FC = () => {
   return (
     <BrowserRouter>
       <Provider store={store}>

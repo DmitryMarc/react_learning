@@ -1,7 +1,7 @@
-import React from 'react';
+import { Component, ComponentType } from 'react';
 import { connect } from 'react-redux';
 import Profile from './Profile';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
     getStatusThunkCreator, 
     getUserProfileThunkCreator,
@@ -13,37 +13,41 @@ import { compose } from 'redux';
 import { AppStateType } from '../../Redux/redux-store';
 import { ProfileType } from '../../types/types';
 
-type MapStatePropsType = {
-    profile: ProfileType | null,
-    status: string,
-    authorizedUserId: any,
-    isAuth: boolean
-}
+type MapStatePropsType = ReturnType<typeof mapStateToProps>;
 
 type MapDispatchPropsType = {
     getUserProfile: (userId:number) => void,
     getStatus: (userId:number) => void,
     updateStatus: (status: string) => void,
-    savePhoto: (file:any) => void,
-    saveProfile: (profile:ProfileType) => void
+    savePhoto: (file:File) => void,
+    saveProfile: (profile:ProfileType) => Promise<any> 
 }
 
-type PropsType = MapStatePropsType & MapDispatchPropsType;
+type PathParamsType = {
+    userId: string
+}
 
-class ProfileContainer extends React.Component<PropsType> {
+type PropsType = MapStatePropsType & MapDispatchPropsType & RouteComponentProps<PathParamsType>;
+
+class ProfileContainer extends Component<PropsType> {
     refreshProfile() {
-        // @ts-ignore
-        let userId = this.props.match.params.userId;
+        let userId: number | null = +this.props.match.params.userId;
         if (!userId) {
             userId = this.props.authorizedUserId; //Мой профиль!!!
             if (!userId) {
-                // @ts-ignore
-                this.props.history.push("/login");
+                //todo: maybe replace push with Redirect???
                 //редирект на логин, если нет id юзера (мой id)
+                this.props.history.push("/login");
             }
         }
-        this.props.getUserProfile(userId);
-        this.props.getStatus(userId);
+
+        if (!userId) {
+            console.error("Id should exists in URL params or in state ('authorizedUserId')");
+        }
+        else {
+            this.props.getUserProfile(userId);
+            this.props.getStatus(userId);
+        }
     }
 
     componentDidMount() {
@@ -51,22 +55,25 @@ class ProfileContainer extends React.Component<PropsType> {
     }
 
     componentDidUpdate(prevProps:PropsType) {
-        // @ts-ignore
         if (this.props.match.params.userId != prevProps.match.params.userId) {
             this.refreshProfile();
         }
     }
 
+    componentWillUnmount(): void {
+        // Почитать про этот жизненный цикл
+    }
+
     render() {
         return (
-            // @ts-ignore
-            <Profile {...this.props} isOwner={this.props.match.params.userId == this.props.authorizedUserId} profile={this.props.profile}
-                status={this.props.status} updateStatus={this.props.updateStatus} savePhoto={this.props.savePhoto} />
+            <Profile {...this.props} isOwner={+this.props.match.params.userId === this.props.authorizedUserId} 
+            profile={this.props.profile} status={this.props.status} updateStatus={this.props.updateStatus} 
+            savePhoto={this.props.savePhoto} />
         );
     }
 }
 
-let mapStateToProps = (state:AppStateType):MapStatePropsType => {
+let mapStateToProps = (state:AppStateType) => {
     return {
         profile: state.profilePage.profile,
         status: state.profilePage.status,
@@ -75,8 +82,8 @@ let mapStateToProps = (state:AppStateType):MapStatePropsType => {
     }
 }
 
-export default compose(
-    connect<MapStatePropsType, MapDispatchPropsType, unknown, AppStateType>(mapStateToProps,
+export default compose<ComponentType>(
+    connect(mapStateToProps,
         {
             getUserProfile: getUserProfileThunkCreator,
             getStatus: getStatusThunkCreator,

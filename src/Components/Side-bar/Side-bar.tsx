@@ -1,9 +1,10 @@
+import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import classes from  './Side-bar.module.css';
 
-const setActive = (newData) => newData.isActive ? classes.activeLink : '';
+const setActive = (newData:any) => newData.isActive ? classes.activeLink : '';
 
-const SideBar = () => {
+const SideBar: FC = () => {
     return (
         <nav className={classes.side__bar}>
             <ul>

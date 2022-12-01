@@ -1,6 +1,5 @@
 import { instance } from "./api";
 
-
 type GetCaptchaUrlResponseType = {
     url: string
 }

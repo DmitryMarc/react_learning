@@ -13,7 +13,7 @@ let rootReducer = combineReducers({
     dialogsPage: dialogsReducer,
     sidebar: sidebarReducer,
     usersPage: usersReducer,
-    auth: authReducer,
+    auth: authReducer, 
     form: formReducer,
     app: appReducer
 });
@@ -21,9 +21,11 @@ let rootReducer = combineReducers({
 type RootReducerType = typeof rootReducer;
 export type AppStateType = ReturnType<RootReducerType>;
 
-type PropertiesTypes<T> = T extends {[key:string]:infer U} ? U : never
+// type PropertiesTypes<T> = T extends {[key:string]:infer U} ? U : never
+// export type InferActionsTypes<T extends {[key:string]:(...arg: any[]) => any}> = ReturnType<PropertiesTypes<T>>
 
-export type InferActionsTypes<T extends {[key:string]:(...arg: any[]) => any}> = ReturnType<PropertiesTypes<T>>
+// Одна данная строчка земеняет две предыдущие строчки
+export type InferActionsTypes<T> = T extends {[key:string]:(...arg: any[]) => infer U} ? U : never;
 
 export type BaseThunkType<ActionType extends Action, ReturnValue = Promise<void>> = ThunkAction<ReturnValue, AppStateType, unknown, ActionType>;
 

@@ -4,15 +4,15 @@ import userPhoto from '../../../assets/images/user.png';
 import ProfileStatusWithHooks from './ProfileStatusWithHooks';
 import { ChangeEvent, FC, useState } from 'react';
 import ProfileDataForm from './ProfileDataForm';
-import { ProfileType } from '../../../types/types';
+import { ContactsType, ProfileType } from '../../../types/types';
 
 type ProfileInfoPropsType = { 
-    profile: ProfileType, 
+    profile: ProfileType | null,
     status: string, 
     isOwner: boolean, 
     updateStatus: (status:string) => void, 
-    savePhoto: (file:any) => void, 
-    saveProfile: (profile: ProfileType) => void 
+    savePhoto: (file:File) => void, 
+    saveProfile: (profile: ProfileType) => Promise<any> 
 }
 
 const ProfileInfo:FC<ProfileInfoPropsType> = ({ profile, status, updateStatus, isOwner, savePhoto, saveProfile }) => {
@@ -24,15 +24,12 @@ const ProfileInfo:FC<ProfileInfoPropsType> = ({ profile, status, updateStatus, i
     }
 
     const onMainPhotoSelected = (e:ChangeEvent<HTMLInputElement>) => {
-        // @ts-ignore
-        if (e.target.files.length) {
-            // @ts-ignore
+        if (e.target.files?.length) {
             savePhoto(e.target.files[0]);
         }
     }
-    // @ts-ignore
-    const onSubmit = (formData) => {
-        // @ts-ignore
+    const onSubmit = (formData: ProfileType) => {
+        // todo: remove then
         saveProfile(formData).then(() => { 
         //ждём из промиса (promise.then(...))
             setEditMode(false);
@@ -48,7 +45,6 @@ const ProfileInfo:FC<ProfileInfoPropsType> = ({ profile, status, updateStatus, i
                     {isOwner && <input type={"file"} onChange={onMainPhotoSelected} />}
 
                     {editMode
-                        // @ts-ignore
                         ? <ProfileDataForm initialValues={profile} profile={profile} onSubmit={onSubmit} />
                         : <ProfileData profile={profile} isOwner={isOwner} goToEditMode={() => { setEditMode(true) }} />
                     }
@@ -87,13 +83,11 @@ const ProfileData:FC<ProfileDataPropsType> = ({ profile, isOwner, goToEditMode }
                 </div>
             }
             <div>
-                {/* @ts-ignore */}
                 <b>About me:</b> {profile.aboutMe}
             </div>
             <div>
                 <b>Contacts:</b> {Object.keys(profile.contacts).map(key => {
-                    {/* @ts-ignore */}
-                    return <Contact contactTitle={key} contactValue={profile.contacts[key]} />
+                    return <Contact contactTitle={key} contactValue={profile.contacts[key as keyof ContactsType]} />
                 })}
             </div>
         </div>

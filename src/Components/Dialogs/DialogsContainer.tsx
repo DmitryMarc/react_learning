@@ -1,16 +1,13 @@
+import { ComponentType } from 'react';
 import { connect } from 'react-redux';
-import { compose, Dispatch } from 'redux';
+import { compose } from 'redux';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
-import { actions, ActionsTypes } from '../../Redux/dialogs-reducer';
+import { actions } from '../../Redux/dialogs-reducer';
 import { AppStateType } from '../../Redux/redux-store';
 import Dialogs from './Dialogs';
 
 type MapStateToPropsType = {
     dialogsPage: any
-}
-
-type MapDispatchToPropsType = {
-    sendMessage: (newMessageBody: string) => void
 }
 
 let mapStateToProps = (state:AppStateType):MapStateToPropsType => {
@@ -19,18 +16,15 @@ let mapStateToProps = (state:AppStateType):MapStateToPropsType => {
     }
 }
 
-let mapDispatchToProps = (dispatch: Dispatch<ActionsTypes>):MapDispatchToPropsType => {
-    return {
-        sendMessage: (newMessageBody) => {
-            dispatch(actions.sendMessageCreator(newMessageBody));
-        } 
-    }
-}
-
-export default compose(
-    connect<MapStateToPropsType, MapDispatchToPropsType, unknown, AppStateType>(mapStateToProps, mapDispatchToProps),
+export default compose<ComponentType>(
+    connect(mapStateToProps, {
+        sendMessage: actions.sendMessageCreator
+        //...actions // Можно передавать callback и так,
+        // но в actions будут сидеть все AC (в данном случае
+        // только sendMessageCreator), следует это учитывать
+        // при дальнейшем пробросе данных и определении типов
+    }),
     withAuthRedirect
-    //@ts-ignore
 )(Dialogs);
 
 

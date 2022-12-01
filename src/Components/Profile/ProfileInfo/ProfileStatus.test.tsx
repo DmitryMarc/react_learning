@@ -1,4 +1,3 @@
-import React from "react";
 import { create } from "react-test-renderer";
 import ProfileStatus from "./ProfileStatus";
 
@@ -6,13 +5,15 @@ describe("ProfileStatus component", () => {
   test("Status from props shoul be in the state", () => {
     const component = create(<ProfileStatus status="it-kamasutra.com" />);
     const instance = component.getInstance();
-    expect(instance.state.status).toBe("it-kamasutra.com");
+    //@ts-ignore
+    expect(instance?.state.status).toBe("it-kamasutra.com");
   });
 
   test("after creation <span></span> should be displayed", () => {
     const component = create(<ProfileStatus status="it-kamasutra.com" />);
     const root = component.root;
     let span = root.findByType("span");
+    //@ts-ignore
     expect(span.length).not.toBeNull();
   });
 
@@ -44,7 +45,8 @@ describe("ProfileStatus component", () => {
     const mockCallback = jest.fn(); //фейковая функция
     const component = create(<ProfileStatus status="it-kamasutra.com" updateStatus ={mockCallback} />);
     const instance = component.getInstance();
-    instance.deactivateEditMode();
+    //@ts-ignore
+    instance?.deactivateEditMode();
     expect(mockCallback.mock.calls.length).toBe(1);
   });
 });

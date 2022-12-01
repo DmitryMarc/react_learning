@@ -8,8 +8,7 @@ let state = {
         { id: 4, message: 'It\'s my coolest post', likesCount: 4 }
     ],
     profile: null,
-    status: '',
-    newPostText: ''
+    status: ''
 }
 //1
 test('message of new post should be correct', () => {
