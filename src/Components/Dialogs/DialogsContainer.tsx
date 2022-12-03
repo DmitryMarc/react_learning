@@ -6,11 +6,7 @@ import { actions } from '../../Redux/dialogs-reducer';
 import { AppStateType } from '../../Redux/redux-store';
 import Dialogs from './Dialogs';
 
-type MapStateToPropsType = {
-    dialogsPage: any
-}
-
-let mapStateToProps = (state:AppStateType):MapStateToPropsType => {
+let mapStateToProps = (state:AppStateType) => {
     return {
         dialogsPage: state.dialogsPage
     }

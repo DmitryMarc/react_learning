@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import classes from  './Side-bar.module.css';
 
+//todo: edit typing of newData
 const setActive = (newData:any) => newData.isActive ? classes.activeLink : '';
 
 const SideBar: FC = () => {

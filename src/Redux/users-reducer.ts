@@ -1,4 +1,4 @@
-import { ResultCodesEnum } from './../api/api';
+import { APIResponseType, ResultCodesEnum } from './../api/api';
 import { UserType } from './../types/types';
 import { updateObjectInArray } from "../utils/object-helpers";
 import { BaseThunkType, InferActionsTypes } from './redux-store';
@@ -13,9 +13,9 @@ let initialState = {
     isFetching: true,
     followingInProgress: [] as Array<number> //array of users ids
 };
-type InitialStateType = typeof initialState;
+export type InitialStateType = typeof initialState;
 
-const usersReducer = (state = initialState, action:ActionsTypes):InitialStateType => {
+const usersReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
         case 'USERS/FOLLOW':
             return {
@@ -64,24 +64,24 @@ type ActionsTypes = InferActionsTypes<typeof actionCreators>;
 export const actionCreators = {
     followSuccessActionCreator: (userId: number) =>
         ({ type: 'USERS/FOLLOW', userId } as const),
-    unfollowSuccessActionCreator:(userId: number) =>
+    unfollowSuccessActionCreator: (userId: number) =>
         ({ type: 'USERS/UNFOLLOW', userId } as const),
-    setUsersActionCreator:(users: Array<UserType>) =>
+    setUsersActionCreator: (users: Array<UserType>) =>
         ({ type: 'USERS/SET_USERS', users } as const),
-    setCurrentPageActionCreator:(currentPage: number) =>
+    setCurrentPageActionCreator: (currentPage: number) =>
         ({ type: 'USERS/SET_CURRENT_PAGE', currentPage } as const),
-    setUsersTotalCountActionCreator:(totalUsersCount: number) =>
+    setUsersTotalCountActionCreator: (totalUsersCount: number) =>
         ({ type: 'USERS/SET_TOTAL_USERS_COUNT', count: totalUsersCount } as const),
-    toggleIsFetchingActionCreator:(isFetching: boolean) =>
+    toggleIsFetchingActionCreator: (isFetching: boolean) =>
         ({ type: 'USERS/TOGGLE_IS_FETCHING', isFetching } as const),
-    toggleFollowingProgressActionCreator:(isFetching: boolean, userId: number) =>
+    toggleFollowingProgressActionCreator: (isFetching: boolean, userId: number) =>
         ({ type: 'USERS/TOGGLE_IS_FOLLOWING_PROGRESS', isFetching, userId } as const)
 }
 
 type ThunkType = BaseThunkType<ActionsTypes>;
 
 //ThunkCreator
-export const requestUsersThunkCreator = (page:number, pageSize:number):ThunkType => {
+export const requestUsersThunkCreator = (page: number, pageSize: number): ThunkType => {
     //return Thunk
     return async (dispatch, getState) => {
         dispatch(actionCreators.toggleIsFetchingActionCreator(true));
@@ -94,9 +94,9 @@ export const requestUsersThunkCreator = (page:number, pageSize:number):ThunkType
     }
 }
 
-const _followUnfollowFlow = async (dispatch:Dispatch<ActionsTypes>, userId:number, 
-    apiMethod:any, actionCreator:(userId:number) => 
-    ActionsTypes) => {
+const _followUnfollowFlow = async (dispatch: Dispatch<ActionsTypes>, userId: number,
+    apiMethod: (userId: number) => Promise<APIResponseType>, actionCreator: (userId: number) =>
+        ActionsTypes) => {
     dispatch(actionCreators.toggleFollowingProgressActionCreator(true, userId));
     let response = await apiMethod(userId);
 
@@ -107,21 +107,21 @@ const _followUnfollowFlow = async (dispatch:Dispatch<ActionsTypes>, userId:numbe
 }
 
 //ThunkCreator
-export const follow = (userId:number):ThunkType => {
+export const follow = (userId: number): ThunkType => {
     //return Thunk
     return async (dispatch) => {
         let apiMethod = usersAPI.follow.bind(usersAPI);
         let actionCreator = actionCreators.followSuccessActionCreator;
-        _followUnfollowFlow(dispatch, userId, apiMethod, actionCreator);
+        await _followUnfollowFlow(dispatch, userId, apiMethod, actionCreator);
     }
 }
 
 //ThunkCreator
-export const unfollow = (userId:number):ThunkType => {
+export const unfollow = (userId: number): ThunkType => {
     //return Thunk
     return async (dispatch) => {
         //аналог предыдущей санки, но без использования переменных
-        _followUnfollowFlow(dispatch, userId, usersAPI.unfollow.bind(usersAPI), actionCreators.unfollowSuccessActionCreator);
+        await _followUnfollowFlow(dispatch, userId, usersAPI.unfollow.bind(usersAPI), actionCreators.unfollowSuccessActionCreator);
     }
 }
 
