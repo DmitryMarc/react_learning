@@ -11,9 +11,15 @@ let initialState = {
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: true,
-    followingInProgress: [] as Array<number> //array of users ids
+    followingInProgress: [] as Array<number>, //array of users ids
+    filter: {
+        term: '',
+        friend: null as null | boolean
+    }
 };
 export type InitialStateType = typeof initialState;
+//автоматический  тип именно filter из initialState:
+export type FilterType = typeof initialState.filter;
 
 const usersReducer = (state = initialState, action: ActionsTypes): InitialStateType => {
     switch (action.type) {
@@ -47,6 +53,11 @@ const usersReducer = (state = initialState, action: ActionsTypes): InitialStateT
                 ...state,
                 isFetching: action.isFetching
             };
+        case 'USERS/SET_FILTER':
+            return {
+                ...state,
+                filter: action.payload
+            }
         case 'USERS/TOGGLE_IS_FOLLOWING_PROGRESS':
             return {
                 ...state,
@@ -70,6 +81,8 @@ export const actionCreators = {
         ({ type: 'USERS/SET_USERS', users } as const),
     setCurrentPageActionCreator: (currentPage: number) =>
         ({ type: 'USERS/SET_CURRENT_PAGE', currentPage } as const),
+    setFilterActionCreator: (filter:FilterType) =>
+        ({ type: 'USERS/SET_FILTER', payload: filter } as const),
     setUsersTotalCountActionCreator: (totalUsersCount: number) =>
         ({ type: 'USERS/SET_TOTAL_USERS_COUNT', count: totalUsersCount } as const),
     toggleIsFetchingActionCreator: (isFetching: boolean) =>
@@ -81,13 +94,14 @@ export const actionCreators = {
 type ThunkType = BaseThunkType<ActionsTypes>;
 
 //ThunkCreator
-export const requestUsersThunkCreator = (page: number, pageSize: number): ThunkType => {
+export const requestUsersThunkCreator = (page: number, pageSize: number, filter: FilterType): ThunkType => {
     //return Thunk
     return async (dispatch, getState) => {
         dispatch(actionCreators.toggleIsFetchingActionCreator(true));
         dispatch(actionCreators.setCurrentPageActionCreator(page));
+        dispatch(actionCreators.setFilterActionCreator(filter));
 
-        let data = await usersAPI.getUsers(page, pageSize);
+        let data = await usersAPI.getUsers(page, pageSize, filter.term, filter.friend);
         dispatch(actionCreators.toggleIsFetchingActionCreator(false));
         dispatch(actionCreators.setUsersActionCreator(data.items));
         dispatch(actionCreators.setUsersTotalCountActionCreator(data.totalCount));

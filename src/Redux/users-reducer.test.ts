@@ -43,7 +43,11 @@ beforeEach(() => {
         totalUsersCount: 0,
         currentPage: 1,
         isFetching: false,
-        followingInProgress: []
+        followingInProgress: [],
+        filter: {
+            term: '',
+            friend: null as null | boolean
+        }
     };
     dispatchMock.mockClear();
     getStateMock.mockClear();
@@ -69,7 +73,7 @@ test("unfollow success", () => {
 
 test("success follow thunk", async () => {
     // Перенесли внутрь теста, чтобы тест прошёл без ошибок
-    // *Благодаря проделанной нами выше типизации после "follow" по ctrl + space появляются подсказки новых свойств
+    // Благодаря проделанной нами выше типизации после "follow" по ctrl + space появляются подсказки новых свойств
     usersAPIMock.follow.mockReturnValue(Promise.resolve(result));
     // стартовые данные
     // нам в thunk вернулась санка из TC follow
