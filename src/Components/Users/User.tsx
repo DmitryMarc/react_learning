@@ -11,7 +11,7 @@ type UserPropsType = {
     follow: (userId: number) => void
 }
 
-let User:FC<UserPropsType> = ({ user, followingInProgress, unfollow, follow }) => {
+const User:FC<UserPropsType> = ({ user, followingInProgress, unfollow, follow }) => {
     return (
         <div>
             <span>

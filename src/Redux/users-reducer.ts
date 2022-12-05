@@ -121,7 +121,7 @@ const _followUnfollowFlow = async (dispatch: Dispatch<ActionsTypes>, userId: num
 }
 
 //ThunkCreator
-export const follow = (userId: number): ThunkType => {
+export const followTC = (userId: number): ThunkType => {
     //return Thunk
     return async (dispatch) => {
         let apiMethod = usersAPI.follow.bind(usersAPI);
@@ -131,7 +131,7 @@ export const follow = (userId: number): ThunkType => {
 }
 
 //ThunkCreator
-export const unfollow = (userId: number): ThunkType => {
+export const unfollowTC = (userId: number): ThunkType => {
     //return Thunk
     return async (dispatch) => {
         //аналог предыдущей санки, но без использования переменных

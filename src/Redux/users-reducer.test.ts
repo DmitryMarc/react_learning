@@ -1,4 +1,4 @@
-import usersReducer, { InitialStateType, actionCreators, follow, unfollow } from './users-reducer';
+import usersReducer, { InitialStateType, actionCreators, followTC, unfollowTC } from './users-reducer';
 import { usersAPI } from '../api/users-api';
 import { APIResponseType, ResultCodesEnum } from '../api/api';
 //"замокай" объект, который возвращается из '../api/users-api'
@@ -77,7 +77,7 @@ test("success follow thunk", async () => {
     usersAPIMock.follow.mockReturnValue(Promise.resolve(result));
     // стартовые данные
     // нам в thunk вернулась санка из TC follow
-    const thunk = follow(1);
+    const thunk = followTC(1);
 
     // тестируемая часть системы // последный параметр экстра аргументы
     await thunk(dispatchMock, getStateMock, {});
@@ -94,7 +94,7 @@ test("success follow thunk", async () => {
 test("success unfollow thunk", async () => {
     usersAPIMock.unfollow.mockReturnValue(Promise.resolve(result));
     // стартовые данные
-    const thunk = unfollow(1);
+    const thunk = unfollowTC(1);
 
     // тестируемая часть системы // последный параметр экстра аргументы
     await thunk(dispatchMock, getStateMock, {});

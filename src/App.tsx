@@ -6,12 +6,12 @@ import { compose } from 'redux';
 import './App.css';
 import Preloader from './Components/common/Preloader/Preloader';
 import HeaderContainer from './Components/Header/HeaderContainer';
-import LoginPage from './Components/Login/Login';
+import { LoginPage } from './Components/Login/Login';
 import Music from './Components/Music/Music';
 import News from './Components/News/News';
 import Settings from './Components/Settings/Settings';
 import SideBar from './Components/Side-bar/Side-bar';
-import UsersContainer from './Components/Users/UsersContainer';
+import { UsersPage } from './Components/Users/UsersContainer';
 import { initializeAppTC } from './Redux/app-reducer';
 import { withSuspense } from './hoc/withSuspense';
 
@@ -53,7 +53,7 @@ class App extends Component<MapPropsType & DispatchPropsType> {
           <Route path='/' render={() => <Redirect to="/profile" />} />        
           <Route path='/dialogs' render={() => <SuspendedDialogs />} />
           <Route path='/profile/:userId?' render={() => <SuspendedProfile />} />
-          <Route path='/users' render={() => <UsersContainer pageTitle={"Пользователи"} />} />
+          <Route path='/users' render={() => <UsersPage pageTitle={"Пользователи"} />} />
           <Route path='/news' render={() => <News />} />
           <Route path='/music' render={() => <Music />} />
           <Route path='/settings' render={() => <Settings />} />
