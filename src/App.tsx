@@ -50,7 +50,8 @@ class App extends Component<MapPropsType & DispatchPropsType> {
         <SideBar />
         <div className='app-wrapper-content'>
           {/* если пользователь залогинен, то нужно при инициализации приложения направлять на его профиль(его id)*/}
-          <Route path='/' render={() => <Redirect to="/profile" />} />        
+          {/* Временно закоментил, т.к. мешало работе с адресной строкой, потом исправить! */}
+          {/* <Route path='/' render={() => <Redirect to="/profile" />} />         */}
           <Route path='/dialogs' render={() => <SuspendedDialogs />} />
           <Route path='/profile/:userId?' render={() => <SuspendedProfile />} />
           <Route path='/users' render={() => <UsersPage pageTitle={"Пользователи"} />} />

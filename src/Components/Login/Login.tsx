@@ -1,4 +1,4 @@
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { InjectedFormProps, reduxForm } from "redux-form";
 import { required } from "../../utils/validators/validators";
 import { createField, GetStringKeysType, Input } from "../common/FormsControls/FormsControls";

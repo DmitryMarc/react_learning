@@ -1,6 +1,8 @@
 import { Formik, Form, Field } from 'formik';
 import { FC, memo } from 'react';
+import { useSelector } from 'react-redux';
 import { FilterType } from '../../Redux/users-reducer';
+import { getUsersFilter } from '../../Redux/users-selectors';
 
 const usersSearchFormValidate = (values: any) => {
     const errors = {};
@@ -13,10 +15,13 @@ type UserSearchFormPropsType = {
 
 type FormType = {
     term: string,
-    friend: string // "true" | "false" | "null" - c этими значениями у меня не работала типизация
+    friend: "true" | "false" | "null"
 }
 
 export const UsersSearchForm: FC<UserSearchFormPropsType> = memo((props) => {
+
+    const filter = useSelector(getUsersFilter);
+
     const submit = (values: FormType, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         // setTimeout(() => {
         //     alert(JSON.stringify(values, null, 2));
@@ -32,7 +37,8 @@ export const UsersSearchForm: FC<UserSearchFormPropsType> = memo((props) => {
     return (
         <div>
             <Formik
-                initialValues={{ term: '', friend: "null"}}
+                enableReinitialize
+                initialValues={{ term: filter.term, friend: String(filter.friend) as "true" | "false" | "null"}}
                 validate={usersSearchFormValidate}
                 onSubmit={submit}
             >

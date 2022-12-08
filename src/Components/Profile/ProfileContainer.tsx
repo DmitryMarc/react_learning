@@ -1,5 +1,5 @@
-import { Component, ComponentType } from 'react';
-import { connect } from 'react-redux';
+import { Component, ComponentType, FC, useEffect } from 'react';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import Profile from './Profile';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
@@ -10,7 +10,7 @@ import {
     updateStatusThunkCreator
 } from '../../Redux/profile-reducer';
 import { compose } from 'redux';
-import { AppStateType } from '../../Redux/redux-store';
+import { AppDispatchType, AppStateType } from '../../Redux/redux-store';
 import { ProfileType } from '../../types/types';
 
 type MapStatePropsType = ReturnType<typeof mapStateToProps>;
@@ -29,7 +29,51 @@ type PathParamsType = {
 
 type PropsType = MapStatePropsType & MapDispatchPropsType & RouteComponentProps<PathParamsType>;
 
+export const ProfileWrapper: FC<PropsType> = (props) => {
+    const profile = useSelector((state:AppStateType) => state.profilePage.profile);
+    const status = useSelector((state:AppStateType) => state.profilePage.status);
+    const authorizedUserId = useSelector((state:AppStateType) => state.auth.userId);
+    //const isAuth = useSelector((state:AppStateType) => state.auth.isAuth);
+
+    const dispatch:AppDispatchType = useDispatch();
+
+    const refreshProfile = () => {
+        let userId: number | null = +props.match.params.userId;
+        if (!userId) {
+            userId = authorizedUserId; //Мой профиль!!!
+            if (!userId) {
+                //todo: maybe replace push with Redirect???
+                //редирект на логин, если нет id юзера (мой id)
+                props.history.push("/login");
+            }
+        }
+        if (!userId) {
+            console.error("Id should exists in URL params or in state ('authorizedUserId')");
+        }
+        else {
+            dispatch(getUserProfileThunkCreator(userId));
+            dispatch(getStatusThunkCreator(userId));
+        }
+    }
+    useEffect(() => {
+        refreshProfile();
+    }, [])
+
+    useEffect(() => {
+        if (props.match.params.userId != props.match.params.userId) {
+            refreshProfile();
+        }
+    }, [props])
+    
+    return (
+        <Profile {...props} isOwner={+props.match.params.userId === authorizedUserId} 
+        profile={profile} status={status} updateStatus={updateStatusThunkCreator} 
+        savePhoto={savePhotoThunkCreator} />
+    );
+}
+
 class ProfileContainer extends Component<PropsType> {
+
     refreshProfile() {
         let userId: number | null = +this.props.match.params.userId;
         if (!userId) {
