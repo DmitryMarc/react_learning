@@ -1,33 +1,64 @@
 // Тип подписчика
-type SubscriberType = (messages: ChatMessageType[]) => void
+type MessagesReceivedSubscriberType = (messages: ChatMessageAPIType[]) => void
+type StatusChangedSubscriberType = (status: StatusType) => void
 
 // Массив подписчиков
-let subscribers = [] as SubscriberType[];
+const subscribers = {
+    'messages-received': [] as MessagesReceivedSubscriberType[],
+    'status-changed': [] as StatusChangedSubscriberType[]
+};
 
 let ws: WebSocket | null = null;
 
+type EventsNamesType = 'messages-received' | 'status-changed';
+
 const closeHandler = () => {
-    console.log('CLOSE WS');
-    //createChannel();
+    // Уведомляем подписчика о статусе
+    notifySubscribersAboutStatus('pending');
     setTimeout(createChannel, 3000);
 }
 
 const messageHandler = (e: MessageEvent) => {
     const newMessages = JSON.parse(e.data);
-    subscribers.forEach(subscriber => subscriber(newMessages))
+    subscribers['messages-received'].forEach(subscriber => subscriber(newMessages))
+}
+
+const openHandler = () => {
+    notifySubscribersAboutStatus('ready');
+}
+
+const errorHandler = () => {
+    notifySubscribersAboutStatus('error');
+    console.error('REFRESH PAGE')
+}
+
+const cleanUp = () => {
+        ws?.removeEventListener('close', closeHandler);
+        ws?.removeEventListener('message', messageHandler);
+        ws?.removeEventListener('open', openHandler);
+        ws?.removeEventListener('error', errorHandler);
+}
+
+// Вспомогательная функция
+const notifySubscribersAboutStatus = (status: StatusType) => {
+    subscribers['status-changed'].forEach(subscriber => subscriber(status));
 }
 
 function createChannel() {
-    // отписываемся от события
-    ws?.removeEventListener('close', closeHandler);
+    // отписываемся от событий
+    cleanUp();
     // закрываем канал
     ws?.close();
 
     ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx');
-    // setWebSocketChannel(ws);
-    //подписываемся на событие
+
+    // пока событие open не произошло
+    notifySubscribersAboutStatus('pending');
+    //подписываемся на события
     ws.addEventListener('close', closeHandler);
     ws.addEventListener('message', messageHandler);
+    ws.addEventListener('open', openHandler);
+    ws.addEventListener('error', errorHandler);
 }
 
 export const chatAPI = {
@@ -36,24 +67,27 @@ export const chatAPI = {
     },
     stopWSChahhel(){
         // Зануляем подписчиков
-        subscribers = [];
+        subscribers['messages-received'] = [];
+        subscribers['status-changed'] = [];
         // Удаляем обработчики
-        ws?.removeEventListener('close', closeHandler);
-        ws?.removeEventListener('message', messageHandler);
+        cleanUp();
         // Закрывваем WS-соединение
         ws?.close();
     },
     // подписка(подписчик)
-    subscribe(callback: SubscriberType){
-        subscribers.push(callback);
+    subscribe(eventName: EventsNamesType, callback: MessagesReceivedSubscriberType | StatusChangedSubscriberType){
+        //@ts-ignore
+        subscribers[eventName].push(callback);
         // 1-ый способ отписки
         return () => {
-            subscribers = subscribers.filter(subscriber => subscriber !== callback);
+            //@ts-ignore
+            subscribers[eventName] = subscribers[eventName].filter(subscriber => subscriber !== callback);
         }
     },
     // 2-ой способ отписки
-    unsubscribe(callback:SubscriberType){
-        subscribers = subscribers.filter(subscriber => subscriber !== callback);
+    unsubscribe(eventName: EventsNamesType, callback: MessagesReceivedSubscriberType | StatusChangedSubscriberType){
+        //@ts-ignore
+        subscribers[eventName] = subscribers[eventName].filter(subscriber => subscriber !== callback);
     },
     // отправка сообщений
     sendMessage(message: string){
@@ -61,9 +95,11 @@ export const chatAPI = {
     }
 }
 
-export type ChatMessageType = {
+export type ChatMessageAPIType = {
     message: string,
     photo: string,
     userId: number,
     userName: string
 }
+
+export type StatusType = 'pending' | 'ready' | 'error';

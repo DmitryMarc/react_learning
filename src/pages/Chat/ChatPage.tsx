@@ -1,7 +1,8 @@
-import { FC, useEffect, useState } from "react";
+import { FC, memo, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ChatMessageType } from "../../api/chat-api";
-import { sendMessageTC, startMessagesListeningTC, stopMessagesListeningTC } from "../../Redux/chat-reducer";
+import { ChatMessageAPIType } from "../../api/chat-api";
+import { sendMessageTC, startMessagesListeningTC, 
+    stopMessagesListeningTC } from "../../Redux/chat-reducer";
 import { AppDispatchType, AppStateType } from "../../Redux/redux-store";
 
 const ChatPage: FC = () => {
@@ -15,6 +16,8 @@ const ChatPage: FC = () => {
 const Chat: FC = () => {
     const dispatch: AppDispatchType = useDispatch();
 
+    const status = useSelector((state: AppStateType) => state.chat.status);
+
     useEffect(() => {
         dispatch(startMessagesListeningTC());
         return () => {
@@ -24,23 +27,47 @@ const Chat: FC = () => {
 
     return (
         <div>
-            <Messages />
-            <AddMessageForm />
+            {status === "error" && <div>Some error occured. Please refresh the page</div>}
+            <>
+                <Messages />
+                <AddMessageForm />
+            </>
         </div>
     )
 }
 
 const Messages: FC = () => {
-    const messages = useSelector((state:AppStateType) => state.chat.messages);
+    console.log('>>>>>>>>>>>>Messages');
+    const messages = useSelector((state: AppStateType) => state.chat.messages);
+    const messagesAnchorRef = useRef<HTMLDivElement>(null);
+    const [isAutoScroll, setIsAutoScroll] = useState(true);
+
+    const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+        const element = e.currentTarget;
+        if(Math.abs(element.scrollHeight - element.scrollTop) - element.clientHeight < 300){
+            !isAutoScroll && setIsAutoScroll(true);
+        } 
+        else {
+            !isAutoScroll && setIsAutoScroll(false);
+        }
+    }
+
+    useEffect(() => {
+        if (isAutoScroll) {
+            // Скроллинг при изменении сообщений
+            messagesAnchorRef.current?.scrollIntoView({ behavior: 'smooth' })
+        }
+    }, [messages])
 
     return (
-        <div style={{ height: '400px', overflowY: 'auto' }}>
-            {messages.map((message, index) => <Message key={index} message={message} />)}
+        <div style={{ height: '400px', overflowY: 'auto' }} onScroll={scrollHandler}>
+            {messages.map((message, index) => <Message key={message.id} message={message} />)}
+            <div ref={messagesAnchorRef}></div>
         </div>
     )
 }
 
-const Message: FC<{ message: ChatMessageType }> = ({ message }) => {
+const Message: FC<{ message: ChatMessageAPIType }> = memo(({ message }) => {
     return (
         <div>
             <img src={message.photo} width="50px" />
@@ -50,13 +77,14 @@ const Message: FC<{ message: ChatMessageType }> = ({ message }) => {
             <hr />
         </div>
     )
-}
+})
 
 const AddMessageForm: FC = () => {
     const [message, setMessage] = useState('');
-    // const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending');
 
     const dispatch: AppDispatchType = useDispatch();
+
+    const status = useSelector((state: AppStateType) => state.chat.status);
 
     const sendMessageHandler = () => {
         if (!message) {
@@ -72,7 +100,7 @@ const AddMessageForm: FC = () => {
             </div>
             <div>
                 {/* <button disabled={webSocketChannel.readyState !== WebSocket.OPEN} onClick={sendMessage}>Send</button> */}
-                <button disabled={false} onClick={sendMessageHandler}>Send</button>
+                <button disabled={status !== 'ready'} onClick={sendMessageHandler}>Send</button>
             </div>
         </div>
     )
