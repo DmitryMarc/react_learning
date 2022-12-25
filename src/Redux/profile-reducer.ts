@@ -70,7 +70,7 @@ export const actions = {
     savePhotoSuccessActionCreator: (photos: PhotosType) => ({ type: 'PROFILE/SAVE_PHOTO_SUCCESS', photos } as const)
 }
 
-type ThunkType = BaseThunkType<ActionsTypes | FormAction>;
+export type ThunkType = BaseThunkType<ActionsTypes | FormAction>;
 
 export const getUserProfileThunkCreator = (userId:number):ThunkType => async (dispatch) => {
     const responseData = await profileAPI.getProfile(userId)

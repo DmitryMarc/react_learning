@@ -1,54 +1,21 @@
 import { FC, memo, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChatMessageAPIType } from "../../api/chat-api";
-import { sendMessageTC, startMessagesListeningTC, 
-    stopMessagesListeningTC } from "../../Redux/chat-reducer";
+import { sendMessageTC } from "../../Redux/chat-reducer";
 import { AppDispatchType, AppStateType } from "../../Redux/redux-store";
 
-const ChatPage: FC = () => {
-    return (
-        <div>
-            <Chat />
-        </div>
-    )
-}
-
-const Chat: FC = () => {
-    const dispatch: AppDispatchType = useDispatch();
-
-    const status = useSelector((state: AppStateType) => state.chat.status);
-
-    useEffect(() => {
-        dispatch(startMessagesListeningTC());
-        return () => {
-            dispatch(stopMessagesListeningTC());
-        }
-    }, [])
-
-    return (
-        <div>
-            {status === "error" && <div>Some error occured. Please refresh the page</div>}
-            <>
-                <Messages />
-                <AddMessageForm />
-            </>
-        </div>
-    )
-}
-
-const Messages: FC = () => {
-    console.log('>>>>>>>>>>>>Messages');
+export const Messages: FC = () => {
     const messages = useSelector((state: AppStateType) => state.chat.messages);
     const messagesAnchorRef = useRef<HTMLDivElement>(null);
     const [isAutoScroll, setIsAutoScroll] = useState(true);
 
     const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
         const element = e.currentTarget;
-        if(Math.abs(element.scrollHeight - element.scrollTop) - element.clientHeight < 300){
+        if (Math.abs(element.scrollHeight - element.scrollTop) - element.clientHeight < 300) {
             !isAutoScroll && setIsAutoScroll(true);
-        } 
+        }
         else {
-            !isAutoScroll && setIsAutoScroll(false);
+            isAutoScroll && setIsAutoScroll(false);
         }
     }
 
@@ -79,11 +46,9 @@ const Message: FC<{ message: ChatMessageAPIType }> = memo(({ message }) => {
     )
 })
 
-const AddMessageForm: FC = () => {
+export const AddMessageForm: FC = () => {
     const [message, setMessage] = useState('');
-
     const dispatch: AppDispatchType = useDispatch();
-
     const status = useSelector((state: AppStateType) => state.chat.status);
 
     const sendMessageHandler = () => {
@@ -96,14 +61,15 @@ const AddMessageForm: FC = () => {
     return (
         <div>
             <div>
-                <textarea onChange={(e) => setMessage(e.currentTarget.value)} value={message}></textarea>
+                <textarea onChange={(e) => setMessage(e.currentTarget.value)}
+                    value={message}></textarea>
             </div>
             <div>
-                {/* <button disabled={webSocketChannel.readyState !== WebSocket.OPEN} onClick={sendMessage}>Send</button> */}
-                <button disabled={status !== 'ready'} onClick={sendMessageHandler}>Send</button>
+                {/* <button disabled={webSocketChannel.readyState
+                 !== WebSocket.OPEN} onClick={sendMessage}>Send</button> */}
+                <button disabled={status !== 'ready'}
+                    onClick={sendMessageHandler}>Send</button>
             </div>
         </div>
     )
 }
-
-export default ChatPage;

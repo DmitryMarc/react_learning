@@ -1,25 +1,25 @@
 import { useState, useEffect, FC, ChangeEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateStatusThunkCreator } from '../../../Redux/profile-reducer';
+import { AppDispatchType, AppStateType } from '../../../Redux/redux-store';
 
-type ProfileStatusPropsType = {
-    status: string,
-    updateStatus: (status: string) => void
-}
-
-const ProfileStatusWithHooks: FC<ProfileStatusPropsType> = (props) => {
-
+const ProfileStatusWithHooks: FC = () => {
+    let globalStatus = useSelector((state:AppStateType) => state.profilePage.status);
     let [editMode, setEditMode] = useState(false);
-    let [status, setStatus] = useState(props.status);
+    let [status, setStatus] = useState(globalStatus);
+    let dispatch: AppDispatchType = useDispatch();
 
     useEffect(() => {
-        setStatus(props.status);
-    }, [props.status])
+        setStatus(globalStatus);
+        setEditMode(false);
+    }, [globalStatus])
 
     const activateEditMode = () => {
         setEditMode(true);
     }
     const deactivateEditMode = () => {
-        setEditMode(false);
-        props.updateStatus(status);
+        // setEditMode(false);
+        dispatch(updateStatusThunkCreator(status));
     }
 
     const onStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,7 @@ const ProfileStatusWithHooks: FC<ProfileStatusPropsType> = (props) => {
             {!editMode &&
                 <div>
                     <b>Status:</b> <span onDoubleClick={activateEditMode}>
-                        {props.status || "-----"}</span>
+                        {globalStatus || "-----"}</span>
                 </div>
             }
             {editMode &&

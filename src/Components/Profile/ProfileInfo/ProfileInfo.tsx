@@ -2,68 +2,69 @@ import Preloader from '../../common/Preloader/Preloader';
 import classes from './ProfileInfo.module.css';
 import userPhoto from '../../../assets/images/user.png';
 import ProfileStatusWithHooks from './ProfileStatusWithHooks';
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import ProfileDataForm from './ProfileDataForm';
 import { ContactsType, ProfileType } from '../../../types/types';
+import { savePhotoThunkCreator, saveProfileThunkCreator } from '../../../Redux/profile-reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatchType, AppStateType } from '../../../Redux/redux-store';
 
-type ProfileInfoPropsType = { 
-    profile: ProfileType | null,
-    status: string, 
-    isOwner: boolean, 
-    updateStatus: (status:string) => void, 
-    savePhoto: (file:File) => void, 
-    saveProfile: (profile: ProfileType) => Promise<any> 
+type ProfileInfoPropsType = {
+    isOwner: boolean,
 }
 
-const ProfileInfo:FC<ProfileInfoPropsType> = ({ profile, status, updateStatus, isOwner, savePhoto, saveProfile }) => {
-
+const ProfileInfo: FC<ProfileInfoPropsType> = ({ isOwner }) => {
+    let profile = useSelector((state:AppStateType) => state.profilePage.profile);
     let [editMode, setEditMode] = useState(false);
+    let dispatch: AppDispatchType = useDispatch();
+    // Нельзя так использовать, т.к. ниже есть хук
+    // if (!profile) {
+    //     return <Preloader />
+    // }
 
-    if (!profile) {
-        return <Preloader />
-    }
-
-    const onMainPhotoSelected = (e:ChangeEvent<HTMLInputElement>) => {
+    const onMainPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.length) {
-            savePhoto(e.target.files[0]);
+            dispatch(savePhotoThunkCreator(e.target.files[0]));
         }
     }
     const onSubmit = (formData: ProfileType) => {
-        // todo: remove then
-        saveProfile(formData).then(() => { 
-        //ждём из промиса (promise.then(...))
-            setEditMode(false);
-        })
+        dispatch(saveProfileThunkCreator(formData));
     }
+
+    useEffect(() => {
+        // закрываем редактирование, когда приходит профиль
+        setEditMode(false);
+    }, [profile])
 
     return (
         <div>
-            <div>
-                <div className={classes.descriptionBlock}>
-                    <img src={profile.photos.small || userPhoto}
-                        className={classes.mainPhoto} />
-                    {isOwner && <input type={"file"} onChange={onMainPhotoSelected} />}
+            {!profile ? <Preloader /> :
+                <div>
+                    <div className={classes.descriptionBlock}>
+                        <img src={profile.photos.small || userPhoto}
+                            className={classes.mainPhoto} />
+                        {isOwner && <input type={"file"} onChange={onMainPhotoSelected} />}
 
-                    {editMode
-                        ? <ProfileDataForm initialValues={profile} profile={profile} onSubmit={onSubmit} />
-                        : <ProfileData profile={profile} isOwner={isOwner} goToEditMode={() => { setEditMode(true) }} />
-                    }
+                        {editMode
+                            ? <ProfileDataForm initialValues={profile} profile={profile} onSubmit={onSubmit} />
+                            : <ProfileData profile={profile} isOwner={isOwner} goToEditMode={() => { setEditMode(true) }} />
+                        }
 
-                    <ProfileStatusWithHooks status={status}
-                        updateStatus={updateStatus} />
+                        <ProfileStatusWithHooks />
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     );
 }
 
 type ProfileDataPropsType = {
-    profile: ProfileType, 
-    isOwner: boolean, 
+    profile: ProfileType,
+    isOwner: boolean,
     goToEditMode: () => void
 }
 
-const ProfileData:FC<ProfileDataPropsType> = ({ profile, isOwner, goToEditMode }) => {
+const ProfileData: FC<ProfileDataPropsType> = ({ profile, isOwner, goToEditMode }) => {
     return (
         <div>
             {isOwner &&
@@ -95,11 +96,11 @@ const ProfileData:FC<ProfileDataPropsType> = ({ profile, isOwner, goToEditMode }
 }
 
 type ContactType = {
-    contactTitle: string, 
+    contactTitle: string,
     contactValue: string
 }
 
-const Contact:FC<ContactType> = ({ contactTitle, contactValue }) => {
+const Contact: FC<ContactType> = ({ contactTitle, contactValue }) => {
     return <div className={classes.contact}><b>{contactTitle}:</b> {contactValue}</div>
 }
 

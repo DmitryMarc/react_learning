@@ -27,7 +27,7 @@ const { Content, Footer, Sider } = Layout;
 const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
   (icon, index) => {
     // todo: Подправить тип (any)
-    const arrayOfTitles: {[key:string]:Array<any>} = {
+    const arrayOfTitles: { [key: string]: Array<any> } = {
       'My Profile': [<Link to='/profile/23977'>Ptofile</Link>,
       <Link to='/dialogs'>Messages</Link>],
       'Developers': [<Link to='/developers'>Developers</Link>],
@@ -39,7 +39,7 @@ const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOu
     const arrayOfKey = Object.keys(arrayOfTitles);
 
     const key = index + 1;
-    
+
     return {
       key,
       //icon: React.createElement(icon),
@@ -47,7 +47,7 @@ const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOu
 
       children: new Array(arrayOfTitles[arrayOfKey[index]].length).fill(null).map((_, j) => {
 
-        const subKey =  index * (arrayOfTitles[arrayOfKey[index]].length + 1) + j;
+        const subKey = index * (arrayOfTitles[arrayOfKey[index]].length + 1) + j;
         return {
           key: subKey,
 
@@ -58,17 +58,17 @@ const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOu
   },
 );
 
-const DialogsContainer = React.lazy(() => import('./Components/Dialogs/DialogsContainer'));
-const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
-const ChatPage = React.lazy(() => import('./pages/Chat/ChatPage'));
+const Dialogs = React.lazy(() => import('./Components/Dialogs/Dialogs'));
+const Profile = React.lazy(() => import('./Components/Profile/Profile'));
+const ChatPage = React.lazy(() => import('./pages/ChatPage'));
 
 type MapPropsType = ReturnType<typeof mapStateToProps>;
 type DispatchPropsType = {
   initializeApp: () => void
 };
 
-const SuspendedDialogs = withSuspense(DialogsContainer);
-const SuspendedProfile = withSuspense(ProfileContainer);
+const SuspendedDialogs = withSuspense(Dialogs);
+const SuspendedProfile = withSuspense(Profile);
 const SuspendedChatPage = withSuspense(ChatPage);
 
 const App: React.FC<MapPropsType & DispatchPropsType> = (props) => {
