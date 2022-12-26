@@ -12,7 +12,7 @@ import Music from './Components/Music/Music';
 import News from './Components/News/News';
 import Settings from './Components/Settings/Settings';
 import SideBar from './Components/Side-bar/Side-bar';
-import { UsersPage } from './Components/Users/UsersContainer';
+import { Users } from './Components/Users/Users';
 import { initializeAppTC } from './Redux/app-reducer';
 import { withSuspense } from './hoc/withSuspense';
 
@@ -123,7 +123,7 @@ const App: React.FC<MapPropsType & DispatchPropsType> = (props) => {
             {/* <Route path='/' render={() => <Redirect to="/profile" />} />         */}
             <Route path='/dialogs' render={() => <SuspendedDialogs />} />
             <Route path='/profile/:userId?' render={() => <SuspendedProfile />} />
-            <Route path='/developers' render={() => <UsersPage pageTitle={"Пользователи"} />} />
+            <Route path='/developers' render={() => <Users pageTitle={"Пользователи"} />} />
             <Route path='/news' render={() => <News />} />
             <Route path='/music' render={() => <Music />} />
             <Route path='/settings' render={() => <Settings />} />

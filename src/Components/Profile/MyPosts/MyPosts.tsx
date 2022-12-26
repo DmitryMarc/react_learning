@@ -5,34 +5,23 @@ import { InjectedFormProps, reduxForm } from 'redux-form';
 import { maxLengthCreator, required } from '../../../utils/validators/validators';
 import { createField, GetStringKeysType, Textarea } from '../../common/FormsControls/FormsControls';
 import { PostType } from '../../../types/types';
+import { actions } from '../../../Redux/profile-reducer';
+import { AppDispatchType, AppStateType } from '../../../Redux/redux-store';
+import { useDispatch, useSelector } from 'react-redux';
 
 type AddPostFormValuesType = {
     newPostText: string
 }
 
-export type MapStatePropsType = {
-    posts: Array<PostType>
-}
-
-export type MapDispatchPropsType = {
-    addPost: (newPostText: string) => void
-}
-
-type MyPostsPropsType = MapStatePropsType & MapDispatchPropsType;
-
-const MyPosts: FC<MyPostsPropsType> = React.memo( props => {
-    // componentDidMount(){
-    //     setTimeout(() => {
-    //         this.setState({a:12})
-    //     }, 3000)
-    // }
+const MyPosts: FC = React.memo( () => {
+    console.log("RENDER YO");
+    let postsData = useSelector((state: AppStateType) => state.profilePage.postsData);
+    const dispatch: AppDispatchType = useDispatch();
 
     // shouldComponentUpdate(nextProps, nextState){
     //     return nextProps != this.props || nextState != this.state;
     // }
-    console.log("RENDER YO");
 
-    let postsData = props.posts;
     let postsElements = postsData.map(post =>
         <Post key={post.id} message={post.message} likesCount={post.likesCount} />
     );
@@ -40,7 +29,7 @@ const MyPosts: FC<MyPostsPropsType> = React.memo( props => {
     // let newPostElement = React.createRef();
 
     let onAddPost = (values: AddPostFormValuesType) => {
-        props.addPost(values.newPostText);
+        dispatch(actions.addPostActionCreator(values.newPostText));
     }
 
     return (
@@ -65,8 +54,7 @@ let AddNewPostForm: FC<InjectedFormProps<AddPostFormValuesType & AddNewPostFormP
         <form onSubmit={props.handleSubmit}>
             <div>
                 {createField<AddPostFormValuesTypeKeys>("Post message", "newPostText", [required], Textarea)}
-                {/* <Field component={Textarea} placeholder={"Post message"} 
-                name="newPostText" validate={[required, maxLengt10]} /> */}
+                {/* name="newPostText" validate={[required, maxLengt10]} /> */}
             </div>
             <div>
                 <button>Add post</button>

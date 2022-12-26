@@ -3,15 +3,19 @@ import classes from './Users.module.css';
 import userPhoto from '../../assets/images/user.png';
 import { NavLink } from 'react-router-dom';
 import { UserType } from '../../types/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFollowingInProgress } from '../../Redux/users-selectors';
+import { followTC, unfollowTC } from '../../Redux/users-reducer';
+import { AppDispatchType } from '../../Redux/redux-store';
 
 type UserPropsType = {
-    user: UserType,
-    followingInProgress: Array<number>,
-    unfollow: (userId: number) => void, 
-    follow: (userId: number) => void
+    user: UserType
 }
 
-const User:FC<UserPropsType> = ({ user, followingInProgress, unfollow, follow }) => {
+const User: FC<UserPropsType> = ({ user }) => {
+    const followingInProgress = useSelector(getFollowingInProgress);
+    const dispatch: AppDispatchType = useDispatch();
+
     return (
         <div>
             <span>
@@ -26,11 +30,11 @@ const User:FC<UserPropsType> = ({ user, followingInProgress, unfollow, follow })
                     {user.followed
                         ? <button disabled={followingInProgress.some(id =>
                             id === user.id)} onClick={() => {
-                                unfollow(user.id);
+                                dispatch(unfollowTC(user.id));
                             }}>Unfollow</button>
                         : <button disabled={followingInProgress.some(id =>
                             id === user.id)} onClick={() => {
-                                follow(user.id);
+                                dispatch(followTC(user.id));
                             }}>Follow</button>}
                 </div>
             </span>
@@ -44,7 +48,8 @@ const User:FC<UserPropsType> = ({ user, followingInProgress, unfollow, follow })
                     <div>{"user.location.city"}</div>
                 </span>
             </span>
-        </div>)
+        </div>
+    )
 }
 
 export default User;

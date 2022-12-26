@@ -7,7 +7,7 @@ import {
 } from '../../Redux/profile-reducer';
 import { AppDispatchType, AppStateType } from '../../Redux/redux-store';
 import ProfileInfo from './ProfileInfo/ProfileInfo';
-import MyPostsContainer from './MyPosts/MyPostsContainer';
+import MyPosts from './MyPosts/MyPosts';
 
 export const Profile: FC<RouteComponentProps<{userId: string}>> = (props) => {
     let authorizedUserId = useSelector((state:AppStateType) => state.auth.userId);
@@ -45,7 +45,7 @@ export const Profile: FC<RouteComponentProps<{userId: string}>> = (props) => {
     return (
         <div>
             <ProfileInfo isOwner={+props.match.params.userId === authorizedUserId} />
-            <MyPostsContainer />
+            <MyPosts />
         </div>
     );
 }
