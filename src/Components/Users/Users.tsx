@@ -2,11 +2,13 @@ import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { AppDispatchType } from '../../Redux/redux-store';
-import { FilterType, requestUsersThunkCreator} 
-from '../../Redux/users-reducer';
-import { getCurrentPage, getPageSize, 
-    getTotalUsersCount, getUsersFilter, 
-    getUsers, getIsFetching } from '../../Redux/users-selectors';
+import { FilterType, requestUsersThunkCreator }
+    from '../../Redux/users-reducer';
+import {
+    getCurrentPage, getPageSize,
+    getTotalUsersCount, getUsersFilter,
+    getUsers, getIsFetching
+} from '../../Redux/selectors/users-selectors';
 import Paginator from '../common/Paginator/Paginator';
 import User from './User';
 import { UsersSearchForm } from './UsersSearchForm';

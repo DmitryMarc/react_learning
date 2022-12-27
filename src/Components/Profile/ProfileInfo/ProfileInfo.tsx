@@ -7,14 +7,15 @@ import ProfileDataForm from './ProfileDataForm';
 import { ContactsType, ProfileType } from '../../../types/types';
 import { savePhotoThunkCreator, saveProfileThunkCreator } from '../../../Redux/profile-reducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatchType, AppStateType } from '../../../Redux/redux-store';
+import { AppDispatchType } from '../../../Redux/redux-store';
+import { selectProfile } from '../../../Redux/selectors/profile-selectors';
 
 type ProfileInfoPropsType = {
     isOwner: boolean,
 }
 
 const ProfileInfo: FC<ProfileInfoPropsType> = ({ isOwner }) => {
-    let profile = useSelector((state:AppStateType) => state.profilePage.profile);
+    let profile = useSelector(selectProfile);
     let [editMode, setEditMode] = useState(false);
     let dispatch: AppDispatchType = useDispatch();
     // Нельзя так использовать, т.к. ниже есть хук

@@ -2,7 +2,8 @@ import { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { startMessagesListeningTC, stopMessagesListeningTC
 } from "../Redux/chat-reducer";
-import { AppDispatchType, AppStateType } from "../Redux/redux-store";
+import { AppDispatchType } from "../Redux/redux-store";
+import { selectStatusWS } from "../Redux/selectors/chat-selectors";
 import { AddMessageForm, Messages } from "./Chat/Chat";
 
 const ChatPage: FC = () => {
@@ -15,7 +16,7 @@ const ChatPage: FC = () => {
 
 const Chat: FC = () => {
     const dispatch: AppDispatchType = useDispatch();
-    const status = useSelector((state: AppStateType) => state.chat.status);
+    const status = useSelector(selectStatusWS);
 
     useEffect(() => {
         dispatch(startMessagesListeningTC());

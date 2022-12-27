@@ -8,9 +8,10 @@ import {
 import { AppDispatchType, AppStateType } from '../../Redux/redux-store';
 import ProfileInfo from './ProfileInfo/ProfileInfo';
 import MyPosts from './MyPosts/MyPosts';
+import { selectAuthorizedUserId } from '../../Redux/selectors/auth-selectors';
 
 export const Profile: FC<RouteComponentProps<{userId: string}>> = (props) => {
-    let authorizedUserId = useSelector((state:AppStateType) => state.auth.userId);
+    let authorizedUserId = useSelector(selectAuthorizedUserId);
     // const isAuth = useSelector((state:AppStateType) => state.auth.isAuth);
 
     const dispatch:AppDispatchType = useDispatch();

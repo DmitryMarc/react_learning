@@ -9,13 +9,14 @@ import DialogItem from './DialogItem/DialogItem';
 import classes from './Dialogs.module.css';
 import Message from './Message/Message';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
+import { selectDialogsPage } from '../../Redux/selectors/dialogs-selectors';
 
 type NewMessageFormValuesType = {
     newMessageBody: string
 }
 
 const Dialogs: FC = () => {
-    let dialogsPage = useSelector((state: AppStateType) => state.dialogsPage);
+    let dialogsPage = useSelector(selectDialogsPage);
     let dialogs = dialogsPage.dialogs;
     let messages = dialogsPage.messages;
     let dispatch: AppDispatchType = useDispatch();

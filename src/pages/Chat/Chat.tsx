@@ -2,10 +2,11 @@ import { FC, memo, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChatMessageAPIType } from "../../api/chat-api";
 import { sendMessageTC } from "../../Redux/chat-reducer";
-import { AppDispatchType, AppStateType } from "../../Redux/redux-store";
+import { AppDispatchType } from "../../Redux/redux-store";
+import { selectChatMessages, selectStatusWS } from "../../Redux/selectors/chat-selectors";
 
 export const Messages: FC = () => {
-    const messages = useSelector((state: AppStateType) => state.chat.messages);
+    const messages = useSelector(selectChatMessages);
     const messagesAnchorRef = useRef<HTMLDivElement>(null);
     const [isAutoScroll, setIsAutoScroll] = useState(true);
 
@@ -49,7 +50,7 @@ const Message: FC<{ message: ChatMessageAPIType }> = memo(({ message }) => {
 export const AddMessageForm: FC = () => {
     const [message, setMessage] = useState('');
     const dispatch: AppDispatchType = useDispatch();
-    const status = useSelector((state: AppStateType) => state.chat.status);
+    const status = useSelector(selectStatusWS);
 
     const sendMessageHandler = () => {
         if (!message) {

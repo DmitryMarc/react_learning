@@ -9,6 +9,7 @@ import { Redirect } from "react-router-dom";
 import style from "./../common/FormsControls/FormsControls.module.css";
 import { FC } from "react";
 import { AppDispatchType, AppStateType } from "../../Redux/redux-store";
+import { selectCaptchaUrl, selectIsAuth } from "../../Redux/selectors/auth-selectors";
 
 type LoginFormOwnProps = {
     captchaUrl: string | null | undefined
@@ -53,9 +54,8 @@ export type LoginFormValuesType = {
 export type LoginFormValuesTypeKeys = GetStringKeysType<LoginFormValuesType>;
 
 export const LoginPage: FC = () => {
-    // const captchaUrl = useSelector<AppStateType>((state) => state.auth.captchaUrl)
-    const captchaUrl = useSelector((state: AppStateType) => state.auth.captchaUrl);
-    const isAuth = useSelector((state: AppStateType) => state.auth.isAuth);
+    const captchaUrl = useSelector(selectCaptchaUrl);
+    const isAuth = useSelector(selectIsAuth);
     const dispatch: AppDispatchType = useDispatch();
 
     const onSubmit = (formData: LoginFormValuesType) => {

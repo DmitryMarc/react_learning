@@ -1,10 +1,11 @@
 import { useState, useEffect, FC, ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateStatusThunkCreator } from '../../../Redux/profile-reducer';
-import { AppDispatchType, AppStateType } from '../../../Redux/redux-store';
+import { AppDispatchType } from '../../../Redux/redux-store';
+import { selectStatus } from '../../../Redux/selectors/profile-selectors';
 
 const ProfileStatusWithHooks: FC = () => {
-    let globalStatus = useSelector((state:AppStateType) => state.profilePage.status);
+    let globalStatus = useSelector(selectStatus);
     let [editMode, setEditMode] = useState(false);
     let [status, setStatus] = useState(globalStatus);
     let dispatch: AppDispatchType = useDispatch();

@@ -5,7 +5,7 @@ import sidebarReducer from "./sidebar-reducer";
 import usersReducer from "./users-reducer";
 import authReducer from "./auth-reducer";
 import thunkMiddleware, { ThunkAction } from "redux-thunk";
-import { reducer as formReducer} from "redux-form";
+import { reducer as formReducer } from "redux-form";
 import appReducer from "./app-reducer";
 import chatReducer from "./chat-reducer";
 
@@ -14,7 +14,7 @@ let rootReducer = combineReducers({
     dialogsPage: dialogsReducer,
     sidebar: sidebarReducer,
     usersPage: usersReducer,
-    auth: authReducer, 
+    auth: authReducer,
     form: formReducer,
     app: appReducer,
     chat: chatReducer
@@ -27,7 +27,7 @@ export type AppStateType = ReturnType<RootReducerType>;
 // export type InferActionsTypes<T extends {[key:string]:(...arg: any[]) => any}> = ReturnType<PropertiesTypes<T>>
 
 // Одна данная строчка земеняет две предыдущие строчки
-export type InferActionsTypes<T> = T extends {[key:string]:(...arg: any[]) => infer U} ? U : never;
+export type InferActionsTypes<T> = T extends { [key: string]: (...arg: any[]) => infer U } ? U : never;
 
 export type BaseThunkType<ActionType extends Action, ReturnValue = Promise<void>> = ThunkAction<ReturnValue, AppStateType, unknown, ActionType>;
 

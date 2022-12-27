@@ -9,7 +9,7 @@ type InitialStateType = typeof initialState;
 
 type ActionType = InferActionsTypes<typeof actions>
 
-const appReducer = (state = initialState, action: ActionType):InitialStateType => {
+const appReducer = (state = initialState, action: ActionType): InitialStateType => {
     switch (action.type) {
         case "APP/INITIALIZED_SUCCESS":
             return {
@@ -22,7 +22,7 @@ const appReducer = (state = initialState, action: ActionType):InitialStateType =
 }
 
 export const actions = {
-    initializedSuccess:() => ({type: 'APP/INITIALIZED_SUCCESS'} as const)
+    initializedSuccess: () => ({ type: 'APP/INITIALIZED_SUCCESS' } as const)
 }
 
 export const initializeAppTC = () => (dispatch: any) => {

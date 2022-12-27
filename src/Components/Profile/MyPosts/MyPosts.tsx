@@ -6,8 +6,9 @@ import { maxLengthCreator, required } from '../../../utils/validators/validators
 import { createField, GetStringKeysType, Textarea } from '../../common/FormsControls/FormsControls';
 import { PostType } from '../../../types/types';
 import { actions } from '../../../Redux/profile-reducer';
-import { AppDispatchType, AppStateType } from '../../../Redux/redux-store';
+import { AppDispatchType } from '../../../Redux/redux-store';
 import { useDispatch, useSelector } from 'react-redux';
+import { selectPostsData } from '../../../Redux/selectors/profile-selectors';
 
 type AddPostFormValuesType = {
     newPostText: string
@@ -15,7 +16,7 @@ type AddPostFormValuesType = {
 
 const MyPosts: FC = React.memo( () => {
     console.log("RENDER YO");
-    let postsData = useSelector((state: AppStateType) => state.profilePage.postsData);
+    let postsData = useSelector(selectPostsData);
     const dispatch: AppDispatchType = useDispatch();
 
     // shouldComponentUpdate(nextProps, nextState){

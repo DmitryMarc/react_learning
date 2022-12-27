@@ -4,9 +4,9 @@ import userPhoto from '../../assets/images/user.png';
 import { NavLink } from 'react-router-dom';
 import { UserType } from '../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
-import { getFollowingInProgress } from '../../Redux/users-selectors';
 import { followTC, unfollowTC } from '../../Redux/users-reducer';
 import { AppDispatchType } from '../../Redux/redux-store';
+import { getFollowingInProgress } from '../../Redux/selectors/users-selectors';
 
 type UserPropsType = {
     user: UserType

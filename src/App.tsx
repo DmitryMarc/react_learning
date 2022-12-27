@@ -1,8 +1,7 @@
-import React, { ComponentType, FC } from 'react';
-import store, { AppStateType } from './Redux/redux-store';
-import { connect, Provider } from 'react-redux';
+import React, { FC, useEffect } from 'react';
+import store, { AppDispatchType } from './Redux/redux-store';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Link, Redirect, Route, withRouter } from 'react-router-dom';
-import { compose } from 'redux';
 import './App.css';
 // Добавили все стили из antd
 import 'antd/dist/reset.css';
@@ -21,6 +20,7 @@ import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { Header } from './Components/Header/Header';
+import { selectIsInitialized } from './Redux/selectors/app-selectors';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -39,18 +39,14 @@ const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOu
     const arrayOfKey = Object.keys(arrayOfTitles);
 
     const key = index + 1;
-
     return {
       key,
       //icon: React.createElement(icon),
       label: arrayOfKey[index],
-
       children: new Array(arrayOfTitles[arrayOfKey[index]].length).fill(null).map((_, j) => {
-
         const subKey = index * (arrayOfTitles[arrayOfKey[index]].length + 1) + j;
         return {
           key: subKey,
-
           label: arrayOfTitles[arrayOfKey[index]][j],
         };
       }),
@@ -62,37 +58,31 @@ const Dialogs = React.lazy(() => import('./Components/Dialogs/Dialogs'));
 const Profile = React.lazy(() => import('./Components/Profile/Profile'));
 const ChatPage = React.lazy(() => import('./pages/ChatPage'));
 
-type MapPropsType = ReturnType<typeof mapStateToProps>;
-type DispatchPropsType = {
-  initializeApp: () => void
-};
-
 const SuspendedDialogs = withSuspense(Dialogs);
 const SuspendedProfile = withSuspense(Profile);
 const SuspendedChatPage = withSuspense(ChatPage);
 
-const App: React.FC<MapPropsType & DispatchPropsType> = (props) => {
+const App: FC = () => {
+  let initialized = useSelector(selectIsInitialized);
+  const dispatch: AppDispatchType = useDispatch();
   // const catchAllUnhandledErrors = (e: PromiseRejectionEvent) => {
   //   alert("Some error occured");
   //   //console.error(promiseRejectionEvent);
   // }
 
-  // useEffect(() => {
-  props.initializeApp();
-  // window.addEventListener("unhandledrejection", catchAllUnhandledErrors);
-  // }, []);
+  useEffect(() => {
+    dispatch(initializeAppTC());
+    // window.addEventListener("unhandledrejection", catchAllUnhandledErrors);
+    return () => {
+      //window.removeEventListener("unhandledrejection", catchAllUnhandledErrors); // глобальный отлов promise
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   window.removeEventListener("unhandledrejection", catchAllUnhandledErrors); // глобальный отлов promise
-  // }, [])
-
-  // componentWillUnmount() {
-  //   window.removeEventListener("unhandledrejection", catchAllUnhandledErrors); // глобальный отлов promise
-  // }
-
-  if (!props.initialized) {
-    return <Preloader />
-  }
+  useEffect(() => {
+    if (!initialized) {
+      <Preloader />
+    }
+  }, [initialized]);
 
   const {
     token: { colorBgContainer },
@@ -138,38 +128,10 @@ const App: React.FC<MapPropsType & DispatchPropsType> = (props) => {
       </Content>
       <Footer style={{ textAlign: 'center' }}>Social Network ©2022 Created by Dmitry Marchenkov</Footer>
     </Layout>
-
-    // <div className='app-wrapper'>
-    //   <HeaderContainer />
-    //   <SideBar />
-    //   <div className='app-wrapper-content'>
-    //     {/* если пользователь залогинен, то нужно при инициализации приложения направлять на его профиль(его id)*/}
-    //     {/* Временно закоментил, т.к. мешало работе с адресной строкой, потом исправить! */}
-    //     {/* <Route path='/' render={() => <Redirect to="/profile" />} />         */}
-    //     <Route path='/dialogs' render={() => <SuspendedDialogs />} />
-    //     <Route path='/profile/:userId?' render={() => <SuspendedProfile />} />
-    //     <Route path='/users' render={() => <UsersPage pageTitle={"Пользователи"} />} />
-    //     <Route path='/news' render={() => <News />} />
-    //     <Route path='/music' render={() => <Music />} />
-    //     <Route path='/settings' render={() => <Settings />} />
-    //     <Route path='/login' render={() => <LoginPage />} />
-    //     <Route path='*' render={() => <div>
-    //       404 NOT FOUND
-    //       {/* <Button type='primary' >OK</Button> */}
-    //     </div>} />
-    //   </div>
-    // </div>
-
   );
 }
 
-const mapStateToProps = (state: AppStateType) => ({
-  initialized: state.app.initialized
-})
-let AppContainer = compose<ComponentType>(
-  withRouter,
-  connect(mapStateToProps, { initializeApp: initializeAppTC }))
-  (App);
+let AppContainer = withRouter(App);
 
 const ReactJSApp: FC = () => {
   return (

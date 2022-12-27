@@ -6,7 +6,7 @@ import { UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatchType } from '../../Redux/redux-store';
-import { selectCurrentUserLogin, selectIsAuth } from '../../Redux/auth-selectors';
+import { selectCurrentUserLogin, selectIsAuth } from '../../Redux/selectors/auth-selectors';
 import { logoutTC } from '../../Redux/auth-reducer';
 
 const items1: MenuProps['items'] = ['1'].map((key) => ({
