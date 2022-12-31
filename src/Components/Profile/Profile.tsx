@@ -60,5 +60,7 @@ export const Profile: FC<RouteComponentProps<{userId: string}>> = (props) => {
 export default withRouter(Profile);
 
 
-
+// Стилизовать информацию пользователя, кнопки
+// Продумать сетку (мб вынести или передвинуть посты)
+// Статус передвинуть (подумать куда)
 

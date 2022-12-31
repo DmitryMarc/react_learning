@@ -4,6 +4,7 @@ import { ChatMessageAPIType } from "../../api/chat-api";
 import { sendMessageTC } from "../../Redux/chat-reducer";
 import { AppDispatchType } from "../../Redux/redux-store";
 import { selectChatMessages, selectStatusWS } from "../../Redux/selectors/chat-selectors";
+import { AutoComplete, Input, Button, Row, Col, Divider } from 'antd';
 
 export const Messages: FC = () => {
     const messages = useSelector(selectChatMessages);
@@ -28,7 +29,7 @@ export const Messages: FC = () => {
     }, [messages])
 
     return (
-        <div style={{ height: '400px', overflowY: 'auto' }} onScroll={scrollHandler}>
+        <div style={{ height: '600px', overflowY: 'auto' }} onScroll={scrollHandler}>
             {messages.map((message, index) => <Message key={message.id} message={message} />)}
             <div ref={messagesAnchorRef}></div>
         </div>
@@ -38,11 +39,13 @@ export const Messages: FC = () => {
 const Message: FC<{ message: ChatMessageAPIType }> = memo(({ message }) => {
     return (
         <div>
+            <Divider />
             <img src={message.photo} width="50px" />
             <b>{message.userName}</b>
             <br />
+            <p>
             {message.message}
-            <hr />
+            </p>
         </div>
     )
 })
@@ -57,20 +60,44 @@ export const AddMessageForm: FC = () => {
             return;
         }
         dispatch(sendMessageTC(message));
-        setMessage('')
+        setMessage('');
     }
+    const { TextArea } = Input;
     return (
         <div>
-            <div>
-                <textarea onChange={(e) => setMessage(e.currentTarget.value)}
-                    value={message}></textarea>
-            </div>
-            <div>
-                {/* <button disabled={webSocketChannel.readyState
-                 !== WebSocket.OPEN} onClick={sendMessage}>Send</button> */}
-                <button disabled={status !== 'ready'}
-                    onClick={sendMessageHandler}>Send</button>
-            </div>
+            <Row style={{ margin: "10px 0 0 0" }}>
+                <Col span={6}>
+                    <div>
+                        {/* <textarea onChange={(e) => setMessage(e.currentTarget.value)}
+                    value={message}></textarea> */}
+                        <AutoComplete
+                            style={{ width: "100%" }}
+                            value={message}
+                        >
+                            <TextArea
+                                placeholder="input here"
+                                className="custom"
+                                style={{ height: 70 }}
+                                onChange={(e) => setMessage(e.currentTarget.value)}
+                                allowClear
+                            />
+                        </AutoComplete>
+                    </div>
+                </Col>
+                <Col span={18}></Col>
+            </Row>
+            <Row style={{ margin: "5px 0 0 0" }}>
+                <Col span={6}>
+                    <div>
+                        {/* <button disabled={status !== 'ready'}
+                    onClick={sendMessageHandler}>Send</button> */}
+                        <Button disabled={status !== 'ready'}
+                            onClick={sendMessageHandler} style={{ float: "right" }}>Send</Button>
+                    </div>
+                </Col>
+                <Col span={18}></Col>
+            </Row>
         </div>
     )
 }
+// Сделать дизайн чата (как минимум формы отправки сообщения и каждого сообщения (мб сделать линии под каждым сообщением отдельно))

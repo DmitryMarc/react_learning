@@ -71,3 +71,5 @@ export const LoginPage: FC = () => {
         <LoginReduxForm onSubmit={onSubmit} captchaUrl={captchaUrl} />
     </div>
 }
+
+// Организовать красивую стулизацию формы логинизации!

@@ -69,3 +69,7 @@ const AddMessageFormRedux = reduxForm<NewMessageFormValuesType, PropsType>({
 })(AddMessageForm)
 
 export default withAuthRedirect(Dialogs);
+
+// Стилизовать форму отправки
+// Продумать архитектуру диалогов
+// Попробовать реализовать диалоги по текстовой API
