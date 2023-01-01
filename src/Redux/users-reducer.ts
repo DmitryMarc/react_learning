@@ -43,6 +43,11 @@ const usersReducer = (state = initialState, action: ActionsTypes): InitialStateT
                 ...state,
                 currentPage: action.currentPage
             };
+        case 'USERS/SET_PAGE_SIZE':
+            return {
+                ...state,
+                pageSize: action.pageSize
+            };
         case 'USERS/SET_TOTAL_USERS_COUNT':
             return {
                 ...state,
@@ -81,6 +86,8 @@ export const actionCreators = {
         ({ type: 'USERS/SET_USERS', users } as const),
     setCurrentPageActionCreator: (currentPage: number) =>
         ({ type: 'USERS/SET_CURRENT_PAGE', currentPage } as const),
+    setPageSizeActionCreator: (pageSize: number) =>
+        ({ type: 'USERS/SET_PAGE_SIZE', pageSize } as const),
     setFilterActionCreator: (filter:FilterType) =>
         ({ type: 'USERS/SET_FILTER', payload: filter } as const),
     setUsersTotalCountActionCreator: (totalUsersCount: number) =>

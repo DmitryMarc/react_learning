@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { AppDispatchType } from '../../Redux/redux-store';
-import { FilterType, requestUsersThunkCreator }
+import { actionCreators, FilterType, requestUsersThunkCreator }
     from '../../Redux/users-reducer';
 import {
     getCurrentPage, getPageSize,
@@ -14,6 +14,7 @@ import User from './User';
 import { UsersSearchForm } from './UsersSearchForm';
 import * as queryString from 'querystring';
 import Preloader from '../common/Preloader/Preloader';
+import { Pagination } from 'antd';
 
 type PropsType = {
     pageTitle: string
@@ -22,6 +23,7 @@ type PropsType = {
 type QueryParamsType = { term?: string, page?: string, friend?: string }
 
 export const Users: FC<PropsType> = (props) => {
+    debugger;
     const users = useSelector(getUsers);
     const totalUsersCount = useSelector(getTotalUsersCount);
     const currentPage = useSelector(getCurrentPage);
@@ -53,11 +55,11 @@ export const Users: FC<PropsType> = (props) => {
             case "null":
                 actualFilter = { ...actualFilter, friend: null };
                 break;
-            case "null":
-                actualFilter = { ...actualFilter, friend: null };
+            case "true":
+                actualFilter = { ...actualFilter, friend: true };
                 break;
-            case "null":
-                actualFilter = { ...actualFilter, friend: null };
+            case "false":
+                actualFilter = { ...actualFilter, friend: false };
                 break;
         }
 
@@ -91,25 +93,42 @@ export const Users: FC<PropsType> = (props) => {
         dispatch(requestUsersThunkCreator(1, pageSize, filter));
     }
 
+    const onShowSizeChange = (pageNumber: number, pageSize: number) => {
+        dispatch(actionCreators.setPageSizeActionCreator(pageSize));
+        dispatch(requestUsersThunkCreator(pageNumber, pageSize, filter));
+    }
+    useEffect(() => {
+        dispatch(requestUsersThunkCreator(currentPage, pageSize, filter));
+    }, [currentPage, pageSize])
+    debugger;
     return (
         <div>
             <h2>{props.pageTitle}</h2>
             {isFetching ? <Preloader /> :
                 <>
                     <UsersSearchForm onFilterChanged={onFilterChanged} />
-                    <Paginator currentPage={currentPage} onPageChanged={onPageChanged}
-                        totalItemsCount={totalUsersCount} pageSize={pageSize} />
+                    {users.length > 0 &&
+                        <Pagination defaultCurrent={1} current={currentPage} total={totalUsersCount}
+                            onChange={onPageChanged} pageSize={pageSize} onShowSizeChange={onShowSizeChange}
+                            pageSizeOptions={[5, 10, 20, 50, 100]} style={{ margin: '20px 0' }} size={'small'} />
+                    }
+                    {/* <Paginator currentPage={currentPage} onPageChanged={onPageChanged}
+                        totalItemsCount={totalUsersCount} pageSize={pageSize} /> */}
                     <div>
                         {
                             users.map(user => <User user={user} key={user.id} />)
                         }
                     </div>
+                    {pageSize > 5 && users.length > 0 &&
+                        <Pagination defaultCurrent={1} current={currentPage} total={totalUsersCount}
+                            onChange={onPageChanged} pageSize={pageSize} onShowSizeChange={onShowSizeChange}
+                            pageSizeOptions={[5, 10, 20, 50, 100]} style={{ margin: '30px 0 0 0' }} size={'small'} />
+                    }
                 </>
             }
         </div>
     )
 }
 
-// Сделать нормальную паггинацию, фильтр, поиск
 // Стилизовать кнопки у каждого пользователя (для начала)
 // Стилизовать информацию пользователя

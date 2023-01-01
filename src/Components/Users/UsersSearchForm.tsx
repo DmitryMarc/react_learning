@@ -1,8 +1,10 @@
 import { Formik, Form, Field } from 'formik';
-import { FC, memo } from 'react';
+import { FC, memo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { FilterType } from '../../Redux/users-reducer';
 import { getUsersFilter } from '../../Redux/selectors/users-selectors';
+import styles from './UsersSearchForm.module.css';
+import { SearchOutlined } from '@ant-design/icons'
 
 const usersSearchFormValidate = (values: any) => {
     const errors = {};
@@ -22,7 +24,8 @@ export const UsersSearchForm: FC<UserSearchFormPropsType> = memo((props) => {
 
     const filter = useSelector(getUsersFilter);
 
-    const submit = (values: FormType, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
+    const submit = (values: FormType, { setSubmitting }:
+        { setSubmitting: (isSubmitting: boolean) => void }) => {
         // setTimeout(() => {
         //     alert(JSON.stringify(values, null, 2));
         //     setSubmitting(false);
@@ -38,26 +41,47 @@ export const UsersSearchForm: FC<UserSearchFormPropsType> = memo((props) => {
         <div>
             <Formik
                 enableReinitialize
-                initialValues={{ term: filter.term, friend: String(filter.friend) as "true" | "false" | "null" }}
+                initialValues={{
+                    term: filter.term, friend: String(filter.friend) as
+                        "true" | "false" | "null"
+                }}
                 validate={usersSearchFormValidate}
                 onSubmit={submit}
             >
-                {({ isSubmitting }) => (
+                {({ isSubmitting, values }) => (
                     <Form>
-                        <Field type="text" name="term" />
-                        <Field name="friend" as="select">
+                        <Field class={styles.searchUsers} placeholder="input here"
+                            type="text" name="term" />
+                        <button className={styles.searchButton} type="submit"
+                            disabled={isSubmitting || (values.term === filter.term && values.friend === String(filter.friend))}>
+                            <SearchOutlined />
+                        </button>
+                        {/* <Field name="friend" as="select">
                             <option value="null">All</option>
                             <option value="true">Only followed</option>
                             <option value="false">Only unfollowed</option>
-                        </Field>
-                        <button type="submit" disabled={isSubmitting}>
-                            Find
-                        </button>
+                        </Field> */}
+
+                        <div className={styles.filterGroup}>
+                            <h3 id="my-radio-group">Фильтр пользователей</h3>
+                            <div role="group" aria-labelledby="my-radio-group">
+                                <label className={styles.filterUsersItem}>
+                                    <Field type="radio" name="friend" value="null" class={styles.filterRadioBtn} />
+                                    All
+                                </label>
+                                <label className={styles.filterUsersItem}>
+                                    <Field type="radio" name="friend" value="true" class={styles.filterRadioBtn} />
+                                    Only followed
+                                </label>
+                                <label className={styles.filterUsersItem}>
+                                    <Field type="radio" name="friend" value="false" class={styles.filterRadioBtn} />
+                                    Only unfollowed
+                                </label>
+                            </div>
+                        </div>
                     </Form>
                 )}
             </Formik>
         </div>
     )
 })
-
-

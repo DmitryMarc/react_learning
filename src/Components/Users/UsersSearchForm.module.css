@@ -1,0 +1,49 @@
+.searchUsers{
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 5px 0 0 5px;
+    width: 300px;
+    border: 1px solid black;
+    border-right: transparent;
+}
+
+.searchUsers:hover,
+.searchButton:hover{
+    border: 1px solid transparent;
+    outline: 1px solid rgb(43, 43, 105);
+}
+
+.searchUsers:hover{
+    cursor: text;
+}
+
+.searchButton{
+    vertical-align: top;
+    height: 29px;
+    border: 1px solid black;
+    border-radius: 0 5px 5px 0;
+}
+
+.filterUsersItem{
+    display: block;
+    padding: 5px 0;
+}
+
+.searchButton:hover,
+.filterUsersItem:hover{
+    cursor: pointer;
+}
+
+.filterGroup{
+    margin: 10px 0 0 0;
+}
+
+.filterRadioBtn{
+    margin-right: 10px;
+    vertical-align: bottom;
+}
+
+.filterRadioBtn:hover{
+    font-size: 20px;
+    cursor: pointer;
+}

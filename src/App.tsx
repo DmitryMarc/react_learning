@@ -113,7 +113,7 @@ const App: FC = () => {
             {/* <Route path='/' render={() => <Redirect to="/profile" />} />         */}
             <Route path='/dialogs' render={() => <SuspendedDialogs />} />
             <Route path='/profile/:userId?' render={() => <SuspendedProfile />} />
-            <Route path='/developers' render={() => <Users pageTitle={"Пользователи"} />} />
+            <Route path='/developers' render={() => <Users pageTitle={"Поиск разработчиков: "} />} />
             <Route path='/news' render={() => <News />} />
             <Route path='/music' render={() => <Music />} />
             <Route path='/settings' render={() => <Settings />} />

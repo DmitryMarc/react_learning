@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { followTC, unfollowTC } from '../../Redux/users-reducer';
 import { AppDispatchType } from '../../Redux/redux-store';
 import { getFollowingInProgress } from '../../Redux/selectors/users-selectors';
+import { PlusOutlined, CheckOutlined } from '@ant-design/icons'
 
 type UserPropsType = {
     user: UserType
@@ -31,11 +32,12 @@ const User: FC<UserPropsType> = ({ user }) => {
                         ? <button disabled={followingInProgress.some(id =>
                             id === user.id)} onClick={() => {
                                 dispatch(unfollowTC(user.id));
-                            }}>Unfollow</button>
+                            }}>Unfollow <CheckOutlined /></button>
                         : <button disabled={followingInProgress.some(id =>
                             id === user.id)} onClick={() => {
                                 dispatch(followTC(user.id));
-                            }}>Follow</button>}
+                            }}>Follow <PlusOutlined /></button>
+                    }
                 </div>
             </span>
             <span>
