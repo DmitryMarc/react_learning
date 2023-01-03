@@ -1,10 +1,57 @@
-.descriptionBlock{
+.descriptionBlock {
     padding: 10px;
 }
-.mainPhoto{
-    max-width:200px;
+.photo{
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
 }
-.contact{
+
+.mainPhoto {
+    max-width: 200px;
+}
+
+.contact {
     padding-left: 10px;
 }
 
+.uploadFile {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.uploadIconWrapper {
+    height: 30px;
+    width: 30px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    border-right: 1px solid #fff;
+    cursor: pointer;
+}
+
+.uploadIcon {
+    padding-left: 10px;
+    font-size: 25px;
+}
+
+.profileInformation {
+    display: inline-block;
+    position: relative;
+}
+.editProfileBtn {
+    cursor: pointer;
+}
+
+.editProfileBtnWrapper{
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    right: 0;
+}

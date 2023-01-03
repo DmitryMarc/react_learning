@@ -1,0 +1,26 @@
+.userContainer {
+    width: 335px;
+    margin: 30px 0;
+}
+
+.userContent {
+    text-align: center;
+}
+
+.userPhoto{
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+}
+
+.userInformation {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: start;
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.userFollowUnfollowBtn {
+    width: 100px;
+}

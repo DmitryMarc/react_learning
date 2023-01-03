@@ -10,7 +10,7 @@ import {
     getUsers, getIsFetching
 } from '../../Redux/selectors/users-selectors';
 import Paginator from '../common/Paginator/Paginator';
-import User from './User';
+import User from './User/User';
 import { UsersSearchForm } from './UsersSearchForm';
 import * as queryString from 'querystring';
 import Preloader from '../common/Preloader/Preloader';
@@ -129,6 +129,3 @@ export const Users: FC<PropsType> = (props) => {
         </div>
     )
 }
-
-// Стилизовать кнопки у каждого пользователя (для начала)
-// Стилизовать информацию пользователя

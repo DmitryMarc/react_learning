@@ -1,5 +1,4 @@
 import Preloader from '../../common/Preloader/Preloader';
-import classes from './ProfileInfo.module.css';
 import userPhoto from '../../../assets/images/user.png';
 import ProfileStatusWithHooks from './ProfileStatusWithHooks';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
@@ -9,6 +8,9 @@ import { savePhotoThunkCreator, saveProfileThunkCreator } from '../../../Redux/p
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatchType } from '../../../Redux/redux-store';
 import { selectProfile } from '../../../Redux/selectors/profile-selectors';
+import { UploadOutlined } from '@ant-design/icons';
+import styles from './ProfileInfo.module.css'
+import { EditOutlined } from '@ant-design/icons'
 
 type ProfileInfoPropsType = {
     isOwner: boolean,
@@ -41,17 +43,25 @@ const ProfileInfo: FC<ProfileInfoPropsType> = ({ isOwner }) => {
         <div>
             {!profile ? <Preloader /> :
                 <div>
-                    <div className={classes.descriptionBlock}>
+                    <div className={styles.descriptionBlock}>
+                        <div className={styles.photo}>
                         <img src={profile.photos.small || userPhoto}
-                            className={classes.mainPhoto} />
-                        {isOwner && <input type={"file"} onChange={onMainPhotoSelected} />}
+                            className={styles.mainPhoto} />
+                        {/* {isOwner && <input type={"file"} onChange={onMainPhotoSelected} />} */}
+                        {isOwner && 
+                            <label className={styles.uploadIconWrapper}>
+                                <input name="file" type="file" className={styles.uploadFile} onChange={onMainPhotoSelected} />
+                                <span className={styles.uploadIconWrapper}><UploadOutlined className={styles.uploadIcon} /></span>
+                            </label>
+                        }
+                        </div>
 
                         {editMode
                             ? <ProfileDataForm initialValues={profile} profile={profile} onSubmit={onSubmit} />
                             : <ProfileData profile={profile} isOwner={isOwner} goToEditMode={() => { setEditMode(true) }} />
                         }
 
-                        <ProfileStatusWithHooks />
+                        {/* <ProfileStatusWithHooks /> */}
                     </div>
                 </div>
             }
@@ -66,16 +76,21 @@ type ProfileDataPropsType = {
 }
 
 const ProfileData: FC<ProfileDataPropsType> = ({ profile, isOwner, goToEditMode }) => {
+    if (!isOwner) {
+        return <Preloader />
+    }
     return (
-        <div>
-            {isOwner &&
-                <div>
-                    <button onClick={goToEditMode}>edit</button>
-                </div>
-            }
-            <div>
-                <b>Full name:</b> {profile.fullName}
+        <div className={styles.profileInformation}>
+            <div className={styles.item1}>
+                <h3>{profile.fullName}</h3>
             </div>
+            {isOwner &&
+            <span className={styles.editProfileBtnWrapper}>
+                edit profile <button className={styles.editProfileBtn} onClick={goToEditMode}><EditOutlined /></button>
+            </span>
+            }
+            <ProfileStatusWithHooks />
+            <hr/>
             <div>
                 <b>Looking for a job:</b> {profile.lookingForAJob ? "yes" : "no"}
             </div>
@@ -102,7 +117,7 @@ type ContactType = {
 }
 
 const Contact: FC<ContactType> = ({ contactTitle, contactValue }) => {
-    return <div className={classes.contact}><b>{contactTitle}:</b> {contactValue}</div>
+    return <div className={styles.contact}><b>{contactTitle}:</b> {contactValue}</div>
 }
 
 export default ProfileInfo;
