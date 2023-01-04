@@ -11,8 +11,24 @@
     max-width: 200px;
 }
 
+.fullName {
+    font-size: 18px;
+    text-decoration: underline;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.informationItem{
+    margin-top: 5px;
+    font-size: 15px;
+}
+
 .contact {
-    padding-left: 10px;
+    padding: 5px 0 0 20px;
+}
+
+.contactTitle {
+    opacity: 0.8;
 }
 
 .uploadFile {
@@ -42,9 +58,20 @@
 }
 
 .profileInformation {
+    width: 350px;
     display: inline-block;
     position: relative;
 }
+
+.informationTitleItem{
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.informationItem:nth-child(2) > .informationTitleItem {
+    margin-top: 5px;
+}
+
 .editProfileBtn {
     cursor: pointer;
 }

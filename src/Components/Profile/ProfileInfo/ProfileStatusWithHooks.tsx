@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateStatusThunkCreator } from '../../../Redux/profile-reducer';
 import { AppDispatchType } from '../../../Redux/redux-store';
 import { selectStatus } from '../../../Redux/selectors/profile-selectors';
+import styles from './ProfileInfo.module.css';
 
 const ProfileStatusWithHooks: FC = () => {
     let globalStatus = useSelector(selectStatus);
@@ -31,7 +32,7 @@ const ProfileStatusWithHooks: FC = () => {
         <div>
             {!editMode &&
                 <div>
-                    <b>Status:</b> <span onDoubleClick={activateEditMode}>
+                    <b className={styles.informationItem}>Status:</b> <span onDoubleClick={activateEditMode}>
                         {globalStatus || "-----"}</span>
                 </div>
             }

@@ -8,7 +8,7 @@ type FormControlPropsType = {
     children: React.ReactNode
 }
 
-const FormControl: FC<FormControlPropsType> = ({ meta: { touched, error }, children }) => {
+export const FormControl: FC<FormControlPropsType> = ({ meta: { touched, error }, children }) => {
     const hasError = touched && error;
     return (
         <div className={styles.formControl + " " + (hasError ? styles.error : "")}>
@@ -24,7 +24,7 @@ export const Textarea: FC<WrappedFieldProps> = (props) => {
     const { input, meta, ...restProps } = props;
     return (
         <FormControl {...props}>
-            <textarea {...input} {...restProps} />
+            <textarea className={styles.textarea} {...input} {...restProps} />
         </FormControl>
     )
 }
@@ -33,13 +33,16 @@ export const Input: FC<WrappedFieldProps> = (props) => {
     const { input, meta, ...restProps } = props;
     return (
         <FormControl {...props}>
-            <input {...input} {...restProps} />
+            <input  className={styles.input} {...input} {...restProps} />
         </FormControl>
     )
 }
 
-export function createField<FormKeysType extends string>(placeholder: string | undefined, name: FormKeysType,
-    validators: Array<FieldValidatorType>, component: FC<WrappedFieldProps>,
+export function createField<FormKeysType extends string>(
+    placeholder: string | undefined, 
+    name: FormKeysType,
+    validators: Array<FieldValidatorType>, 
+    component: FC<WrappedFieldProps>,
     props = {}, text = "") {
     return (
         <div>

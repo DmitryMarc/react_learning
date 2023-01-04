@@ -23,7 +23,6 @@ type PropsType = {
 type QueryParamsType = { term?: string, page?: string, friend?: string }
 
 export const Users: FC<PropsType> = (props) => {
-    debugger;
     const users = useSelector(getUsers);
     const totalUsersCount = useSelector(getTotalUsersCount);
     const currentPage = useSelector(getCurrentPage);
@@ -100,7 +99,7 @@ export const Users: FC<PropsType> = (props) => {
     useEffect(() => {
         dispatch(requestUsersThunkCreator(currentPage, pageSize, filter));
     }, [currentPage, pageSize])
-    debugger;
+    
     return (
         <div>
             <h2>{props.pageTitle}</h2>
