@@ -24,6 +24,7 @@
     display: inline-block;
     width: 20px;
     padding: 0;
+    vertical-align: middle;
 }
 
 .input[type='checkbox']:hover {
