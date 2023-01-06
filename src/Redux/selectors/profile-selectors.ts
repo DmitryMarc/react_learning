@@ -4,6 +4,10 @@ export const selectProfile = (state: AppStateType) => {
     return state.profilePage.profile;
 }
 
+export const selectProfilePhoto = (state: AppStateType) => {
+    return state.profilePage.profile?.photos.small;
+}
+
 export const selectStatus = (state: AppStateType) => {
     return state.profilePage.status;
 }

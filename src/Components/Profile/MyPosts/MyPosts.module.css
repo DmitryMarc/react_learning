@@ -1,7 +1,9 @@
 .postsBlock{
+    width: 495px;
     padding: 10px;
 }
 
 .posts{
     margin-top: 10px;
+    word-wrap: break-word;
 }

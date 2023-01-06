@@ -9,6 +9,7 @@ import { AppDispatchType, AppStateType } from '../../Redux/redux-store';
 import ProfileInfo from './ProfileInfo/ProfileInfo';
 import MyPosts from './MyPosts/MyPosts';
 import { selectAuthorizedUserId } from '../../Redux/selectors/auth-selectors';
+import { Col, Row } from 'antd';
 
 export const Profile: FC<RouteComponentProps<{userId: string}>> = (props) => {
     let authorizedUserId = useSelector(selectAuthorizedUserId);
@@ -44,10 +45,15 @@ export const Profile: FC<RouteComponentProps<{userId: string}>> = (props) => {
     }, [props.match.params.userId])
     
     return (
-        <div>
+        <Row gutter={[1,0]}>
+            <Col span={12}>
             <ProfileInfo isOwner={+props.match.params.userId === authorizedUserId} />
+            </Col>
+            <Col span={12}></Col>
+            <Col span={8}>
             <MyPosts />
-        </div>
+            </Col>
+        </Row>
     );
 }
 

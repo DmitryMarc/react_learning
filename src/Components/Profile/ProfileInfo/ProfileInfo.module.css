@@ -61,6 +61,7 @@
     width: 350px;
     display: inline-block;
     position: relative;
+    word-wrap: break-word;
 }
 
 .informationTitleItem{
