@@ -9,7 +9,7 @@ import { Redirect } from "react-router-dom";
 import style from "./../common/FormsControls/FormsControls.module.css";
 import { FC } from "react";
 import { AppDispatchType } from "../../Redux/redux-store";
-import { selectCaptchaUrl, selectIsAuth }
+import { selectAuthorizedUserId, selectCaptchaUrl, selectIsAuth }
     from "../../Redux/selectors/auth-selectors";
 import { Button, Col, Row } from "antd";
 
@@ -89,6 +89,7 @@ export type LoginFormValuesTypeKeys = GetStringKeysType<LoginFormValuesType>;
 export const LoginPage: FC = () => {
     const captchaUrl = useSelector(selectCaptchaUrl);
     const isAuth = useSelector(selectIsAuth);
+    const authorizedUserId = useSelector(selectAuthorizedUserId);
     const dispatch: AppDispatchType = useDispatch();
 
     const onSubmit = (formData: LoginFormValuesType) => {
@@ -96,8 +97,8 @@ export const LoginPage: FC = () => {
             formData.rememberMe, formData.captcha));
     }
 
-    if (isAuth) {
-        return <Redirect to={"/profile"} />
+    if (isAuth && authorizedUserId) {
+        return <Redirect to={`/profile/${authorizedUserId}`} />
     }
     return <div>
         <h1>Login</h1>

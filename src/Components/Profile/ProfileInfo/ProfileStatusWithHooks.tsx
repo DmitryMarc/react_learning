@@ -5,7 +5,11 @@ import { AppDispatchType } from '../../../Redux/redux-store';
 import { selectStatus } from '../../../Redux/selectors/profile-selectors';
 import styles from './ProfileInfo.module.css';
 
-const ProfileStatusWithHooks: FC = () => {
+type ProfileStatusPropsType = {
+    isOwner: boolean
+}
+
+const ProfileStatusWithHooks: FC<ProfileStatusPropsType> = ({isOwner}) => {
     let globalStatus = useSelector(selectStatus);
     let [editMode, setEditMode] = useState(false);
     let [status, setStatus] = useState(globalStatus);
@@ -17,10 +21,14 @@ const ProfileStatusWithHooks: FC = () => {
     }, [globalStatus])
 
     const activateEditMode = () => {
-        setEditMode(true);
+        if (isOwner) {
+            setEditMode(true);
+        }
     }
-    const deactivateEditMode = () => {
-        // setEditMode(false);
+    const deactivateEditMode = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.currentTarget.value === globalStatus) {
+            setEditMode(false);
+        }
         dispatch(updateStatusThunkCreator(status));
     }
 

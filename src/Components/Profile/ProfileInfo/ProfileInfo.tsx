@@ -15,6 +15,7 @@ import { selectProfile } from '../../../Redux/selectors/profile-selectors';
 import { UploadOutlined } from '@ant-design/icons';
 import styles from './ProfileInfo.module.css'
 import { EditOutlined } from '@ant-design/icons'
+import { selectIsAuth } from '../../../Redux/selectors/auth-selectors';
 
 type ProfileInfoPropsType = {
     isOwner: boolean,
@@ -90,6 +91,7 @@ type ProfileDataPropsType = {
 
 const ProfileData: FC<ProfileDataPropsType> = ({ profile, isOwner,
     goToEditMode, isContacts, setIsContacts }) => {
+        const isAuth = useSelector(selectIsAuth);
     // if (!isOwner) {
     //     return <Preloader />
     // }
@@ -109,7 +111,7 @@ const ProfileData: FC<ProfileDataPropsType> = ({ profile, isOwner,
                         onClick={goToEditMode}><EditOutlined /></button>
                 </span>
             }
-            <ProfileStatusWithHooks />
+            <ProfileStatusWithHooks isOwner={isOwner} />
             <hr />
             <div className={styles.informationItem}>
                 <b>Looking for a job:</b> {profile.lookingForAJob ? "yes" : "no"}

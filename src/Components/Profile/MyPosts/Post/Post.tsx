@@ -10,7 +10,6 @@ type PostPropsType = {
 }
 
 const Post: FC<PostPropsType> = (props) => {
-    console.log('rerender')
     const [likesNumber, setLikesNumber] = useState(props.likesCount);
     const [isLiked, setIsLiked] = useState(false);
     return (

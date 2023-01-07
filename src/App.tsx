@@ -21,14 +21,31 @@ import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { Header } from './Components/Header/Header';
 import { selectIsInitialized } from './Redux/selectors/app-selectors';
+import { selectAuthorizedUserId, selectIsAuth } from './Redux/selectors/auth-selectors';
 
 const { Content, Footer, Sider } = Layout;
 
+// const authorizedUserIdHandler = () => {
+//   const isAuth = useSelector(selectIsAuth);
+//   const authorizedUserId = useSelector(selectAuthorizedUserId)?.toString;
+//   if (isAuth) {
+//     return authorizedUserId;
+//   }
+// }
+
 const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
   (icon, index) => {
+  //контейнерный компонент для динамического id авторизованного пользователя
+  const CustomLinkForProfile = (props:any) => {
+    const authorizedUserId = useSelector(selectAuthorizedUserId);
+  return (
+      <Link to={props.to + authorizedUserId}>{props.children}</Link>
+  );
+}
+//<Link to='/profile/23977'>Profile</Link>
     // todo: Подправить тип (any)
     const arrayOfTitles: { [key: string]: Array<any> } = {
-      'My Profile': [<Link to='/profile/23977'>Ptofile</Link>,
+      'My Profile': [<CustomLinkForProfile to="/profile/">Profile</CustomLinkForProfile>,
       <Link to='/dialogs'>Messages</Link>],
       'Developers': [<Link to='/developers'>Developers</Link>],
       'Other': [<Link to='/chat'>Chat</Link>,
