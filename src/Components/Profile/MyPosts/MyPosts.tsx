@@ -26,7 +26,7 @@ const MyPosts: FC = React.memo(() => {
     }, [userPhoto])
 
     let postsElements = postsData.map(post =>
-        <Post key={post.id} userPhoto={actualUserPhoto}
+        <Post key={post.id} id={post.id} isLiked={post.isLiked} userPhoto={actualUserPhoto}
             message={post.message} likesCount={post.likesCount} />
     );
 

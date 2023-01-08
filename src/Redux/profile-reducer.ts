@@ -6,10 +6,10 @@ import { BaseThunkType, InferActionsTypes } from './redux-store';
 
 let initialState = {
     postsData: [
-        { id: 1, message: 'Hi, how are you?', likesCount: 15 },
-        { id: 2, message: 'It\'s my first post', likesCount: 20 },
-        { id: 3, message: 'It\'s my second post', likesCount: 21 },
-        { id: 4, message: 'It\'s my coolest post', likesCount: 4 }
+        { id: 1, message: 'Hi, how are you?', likesCount: 15, isLiked: false},
+        { id: 2, message: 'It\'s my first post', likesCount: 20, isLiked: false },
+        { id: 3, message: 'It\'s my second post', likesCount: 21, isLiked: false },
+        { id: 4, message: 'It\'s my coolest post', likesCount: 4, isLiked: false }
     ] as Array<PostType>,
     profile: null as ProfileType | null,
     status: ''
@@ -24,11 +24,24 @@ const profileReducer = (state = initialState, action:ActionsTypes):InitialStateT
             let newPost = {
                 id: state.postsData.length + 1,
                 message: action.newPostText,
-                likesCount: 0
+                likesCount: 0,
+                isLiked: false
             }
             return {
                 ...state,
                 postsData: [...state.postsData, newPost]
+            };
+        }
+        case 'PROFILE/CLICK_LIKE': {
+            return {
+                ...state,
+                postsData: [...state.postsData].map(post => {
+                    if (post.id === action.id){
+                        post.likesCount = action.likesCount;
+                        post.isLiked = action.isLiked;
+                    }
+                    return post;
+                })
             };
         }
         case 'PROFILE/SET_STATUS': {
@@ -64,6 +77,7 @@ export type ActionsTypes = InferActionsTypes<typeof actions>;
 
 export const actions = {
     addPostActionCreator: (newPostText: string) => ({ type: 'PROFILE/ADD_POST', newPostText } as const),
+    clickLikeActionCreator: (id: number, likesCount: number, isLiked: boolean) => ({ type: 'PROFILE/CLICK_LIKE', id, likesCount, isLiked } as const),
     setUserProfileActionCreator: (profile: ProfileType) => ({ type: 'PROFILE/SET_USER_PROFILE', profile } as const),
     setStatusActionCreator: (status: string) => ({ type: 'PROFILE/SET_STATUS', status } as const),
     deletePostActionCreator: (postId: number) => ({ type: 'PROFILE/DELETE_POST', postId } as const),

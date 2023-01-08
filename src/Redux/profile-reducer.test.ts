@@ -2,10 +2,10 @@ import profileReducer, { actions } from "./profile-reducer";
 
 let state = {
     postsData: [
-        { id: 1, message: 'Hi, how are you?', likesCount: 15 },
-        { id: 2, message: 'It\'s my first post', likesCount: 20 },
-        { id: 3, message: 'It\'s my second post', likesCount: 21 },
-        { id: 4, message: 'It\'s my coolest post', likesCount: 4 }
+        { id: 1, message: 'Hi, how are you?', likesCount: 15, isLiked: false },
+        { id: 2, message: 'It\'s my first post', likesCount: 20, isLiked: false },
+        { id: 3, message: 'It\'s my second post', likesCount: 21, isLiked: false },
+        { id: 4, message: 'It\'s my coolest post', likesCount: 4, isLiked: false}
     ],
     profile: null,
     status: ''

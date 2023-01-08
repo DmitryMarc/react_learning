@@ -5,6 +5,8 @@ import { sendMessageTC } from "../../Redux/chat-reducer";
 import { AppDispatchType } from "../../Redux/redux-store";
 import { selectChatMessages, selectStatusWS } from "../../Redux/selectors/chat-selectors";
 import { AutoComplete, Input, Button, Row, Col, Divider } from 'antd';
+import { selectAuthorizedUserId, selectIsAuth } from "../../Redux/selectors/auth-selectors";
+import { Redirect, useHistory } from "react-router-dom";
 
 export const Messages: FC = () => {
     const messages = useSelector(selectChatMessages);
@@ -37,15 +39,17 @@ export const Messages: FC = () => {
 }
 
 const Message: FC<{ message: ChatMessageAPIType }> = memo(({ message }) => {
+    const history = useHistory();
+    const onClickHandler = () => {
+        history.push(`/profile/${message.userId}`)
+    }
     return (
         <div>
             <Divider />
-            <img src={message.photo} width="50px" />
+            <a onClick={onClickHandler}><img src={message.photo} width="50px" /></a>
             <b>{message.userName}</b>
             <br />
-            <p>
-            {message.message}
-            </p>
+            <p>{message.message}</p>
         </div>
     )
 })
