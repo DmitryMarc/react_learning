@@ -1,16 +1,24 @@
 import { FC } from 'react';
+import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import classes from './../Dialogs.module.css';
+import { setMessagesWithUserThunkCreator } from '../../../Redux/dialogs-reducer';
+import { AppDispatchType } from '../../../Redux/redux-store';
+import styles from './../Dialogs.module.css';
 
 type DialogItemPropsType = {
     id: number,
-    name: string
+    name: string,
+    photo: string | null
 }
 
 const DialogItem: FC<DialogItemPropsType> = (props) => {
+    const dispatch: AppDispatchType = useDispatch();
+    const onClickHandler = () => {
+        dispatch(setMessagesWithUserThunkCreator(props.id));
+    }
     return (
-        <div className={classes.dialog + ' ' + classes.active}>
-            <NavLink to={'/dialogs/' + props.id}>{props.name}</NavLink>
+        <div className={styles.dialog + ' ' + styles.active}>
+            <NavLink onClick={onClickHandler} to={'/dialogs/' + props.id + '/messages'}>{props.name}</NavLink>
         </div>
     );
 }

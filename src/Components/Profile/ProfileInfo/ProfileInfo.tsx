@@ -16,6 +16,9 @@ import { UploadOutlined } from '@ant-design/icons';
 import styles from './ProfileInfo.module.css'
 import { EditOutlined } from '@ant-design/icons'
 import { selectIsAuth } from '../../../Redux/selectors/auth-selectors';
+import { Button } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
+import { addNewDialogThunkCreator, setMessagesWithUserThunkCreator } from '../../../Redux/dialogs-reducer';
 
 type ProfileInfoPropsType = {
     isOwner: boolean,
@@ -91,7 +94,9 @@ type ProfileDataPropsType = {
 
 const ProfileData: FC<ProfileDataPropsType> = ({ profile, isOwner,
     goToEditMode, isContacts, setIsContacts }) => {
-        const isAuth = useSelector(selectIsAuth);
+    const dispatch: AppDispatchType = useDispatch();
+    const params: {userId: string} = useParams();
+    const history = useHistory();
     // if (!isOwner) {
     //     return <Preloader />
     // }
@@ -100,6 +105,12 @@ const ProfileData: FC<ProfileDataPropsType> = ({ profile, isOwner,
     useEffect(() => {
         return setIsContacts(false);
     }, [])
+
+    const onClickHandler = () => {
+        dispatch(addNewDialogThunkCreator(+params.userId));
+        history.push(`/dialogs/${+params.userId}/messages`);
+        dispatch(setMessagesWithUserThunkCreator(+params.userId));
+    }
     return (
         <div className={styles.profileInformation}>
             <div className={styles.fullName}>
@@ -132,6 +143,11 @@ const ProfileData: FC<ProfileDataPropsType> = ({ profile, isOwner,
                         contactValue={profile.contacts[key as keyof ContactsType]} />
                 })}
             </div>
+            {!isOwner &&
+            <div className={styles.informationItem}>
+                <Button onClick={onClickHandler}>Write message</Button>
+            </div>
+            }
         </div>
     )
 }

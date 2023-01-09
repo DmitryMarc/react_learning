@@ -15,7 +15,6 @@ type PostPropsType = {
 }
 
 const Post: FC<PostPropsType> = ({id,message,likesCount, isLiked, userPhoto}) => {
-    debugger;
     const dispatch: AppDispatchType = useDispatch();
     const onClickLikeHandler = () => {
         if (!isLiked) {
