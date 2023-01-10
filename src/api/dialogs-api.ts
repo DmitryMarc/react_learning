@@ -38,8 +38,8 @@ export const dialogsAPI = {
     addNewDialog(userId: number) {
         return instance.put<APIResponseType>(`dialogs/${userId}`).then(response => response.data);
     },
-    getMessagesWithUser(userId: number) {
-        return instance.get<APIResponseTypeForGetMessagesWithUser>(`dialogs/${userId}/messages`).then(response => response.data);
+    getMessagesWithUser(userId: number, count: number) {
+        return instance.get<APIResponseTypeForGetMessagesWithUser>(`dialogs/${userId}/messages?count=${count}`).then(response => response.data);
     },
     sendMessage(userId: number, message: string) {
         return instance.post<APIResponseTypeForSendMessage>(`dialogs/${userId}/messages`, {body: message}).then(response => response.data);

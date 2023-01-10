@@ -3,9 +3,19 @@
     grid-template-columns: 2fr 10fr;
 }
 
+.dialogsItemsWrapper{
+    width: 300px;
+    height: 600px;
+    overflow: hidden;
+}
+
 .dialogsItems{
-    padding: 20px 0 0 20px;
+    width: 100%;
+    height: 100%;
+    padding: 0 20px 0 20px;
     color: white;
+    overflow-y: auto;
+    box-sizing: content-box;
 }
 
 .dialogsItems > .active{
@@ -20,10 +30,52 @@
     text-decoration: none;
 }
 
+.messagesWrapper{
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    overflow: hidden;
+}
+
 .messages{
-    padding: 10px;
+    width: 600px;
+    overflow-y: auto;
+    padding-right: 17px; /* Increase/decrease this value for cross-browser compatibility */
+    box-sizing: content-box;
 }
 
 .message{
-    color: white;
+    padding: 10px;
 }
+
+.messageInformation {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.sanderName{
+    padding: 0 5px;
+    vertical-align: middle;
+}
+
+.messageBody{
+    padding: 10px;
+    margin: 5px 60% 0 20px;
+    background-color: antiquewhite;
+    border-radius: 0 10px 10px 10px;
+}
+
+.messageBodyOfSender{
+    padding: 10px;
+    margin: 5px 20px 0 60%;
+    text-align: end;
+    background-color: rgba(127, 255, 212, 0.423);
+    border-radius: 10px 0 10px 10px;
+    word-wrap: break-word;
+}
+
+/* .message{
+    color: white;
+} */

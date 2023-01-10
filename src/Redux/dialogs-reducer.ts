@@ -2,7 +2,7 @@ import { ResultCodesEnum } from './../api/api';
 import { dialogsAPI } from "../api/dialogs-api";
 import { BaseThunkType, InferActionsTypes } from "./redux-store";
 
-type DialogType = {
+export type DialogType = {
     id: number,
     userName: string,
     photos: {
@@ -10,7 +10,7 @@ type DialogType = {
         small: string | null
     }
 }
-type MessageType = {
+export type MessageType = {
     body: string,
     id?: string,
     recipientId?: number,
@@ -66,7 +66,7 @@ export const setDialogsThunkCreator = ():ThunkType => async (dispatch) => {
 };
 
 export const setMessagesWithUserThunkCreator = (userId: number):ThunkType => async (dispatch) => {
-    const responseData = await dialogsAPI.getMessagesWithUser(userId);
+    const responseData = await dialogsAPI.getMessagesWithUser(userId, 20);
     if (responseData) {
         dispatch(actions.setMessagesWithUserAC(responseData.items));
     }

@@ -12,6 +12,7 @@ import { selectDialogsPage } from '../../Redux/selectors/dialogs-selectors';
 import { dialogsAPI } from '../../api/dialogs-api';
 import { Route } from 'react-router-dom';
 import Messages from './Message/Messages';
+import { Button, Col, Row } from 'antd';
 
 type NewMessageFormValuesType = {
     newMessageBody: string
@@ -23,26 +24,28 @@ const Dialogs: FC = () => {
     const messages = dialogsPage.messages;
     const dispatch: AppDispatchType = useDispatch();
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(setDialogsThunkCreator());
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(setDialogsThunkCreator());
     }, [messages])
 
     let dialogsElements = dialogs.map(dialog =>
-        <DialogItem name={dialog.userName} key={dialog.id} id={dialog.id}  photo={dialog.photos.small} />
+        <DialogItem name={dialog.userName} key={dialog.id} id={dialog.id} photo={dialog.photos.small} />
     );
 
     return (
         <div className={classes.dialogs}>
-            <div className={classes.dialogsItems}>
-                {dialogsElements}
+            <div className={classes.dialogsItemsWrapper}>
+                <div className={classes.dialogsItems}>
+                    {dialogsElements}
+                </div>
             </div>
             <div className={classes.messages}>
                 <div>
-                    <Route path='/dialogs/:userId/messages' render={() => <Messages messages={messages} />} />
+                    <Route path='/dialogs/:userId/messages' render={() => <Messages dialogs={dialogs} messages={messages} />} />
                 </div>
             </div>
         </div>
@@ -58,16 +61,25 @@ const AddMessageForm: FC<InjectedFormProps<NewMessageFormValuesType,
     PropsType> & PropsType> = (props) => {
         // const handler = async () => {
         //     const responseData = await dialogsAPI.getNewMessagesCount();
-        //     // responseData.
         //     console.log(responseData);
         // }
         return (
             <form onSubmit={props.handleSubmit}>
-                <div>
-                    {createField<NewMessageFormValuesKeysType>("Enter your message",
-                        "newMessageBody", [required, maxLength50], Textarea)}
-                </div>
-                <div><button>Send</button></div>
+                <Row>
+                    <Col span={12}>
+                        <div style={{width: '600px', marginTop: '20px',  padding: '0 10px'}}>
+                            {createField<NewMessageFormValuesKeysType>("Enter your message",
+                            "newMessageBody", [required, maxLength50], Textarea)}
+                        </div>
+                    </Col>
+                    <Col span={12}></Col>
+                    <Col span={12}>
+                        {/* <div><button>Send</button></div> */}
+                        <div style={{width: '600px', paddingRight: '10px'}}>
+                            <Button htmlType='submit' style={{ float: 'right'}}>Send</Button>
+                        </div>
+                    </Col>
+                </Row>
             </form>
         )
     }
@@ -78,5 +90,5 @@ export const AddMessageFormRedux = reduxForm<NewMessageFormValuesType, PropsType
 
 export default withAuthRedirect(Dialogs);
 
-// Стилизовать форму отправки
-// Продумать архитектуру диалогов
+// Стилизовать форму отправки !
+// Продумать архитектуру диалогов !
