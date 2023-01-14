@@ -1,6 +1,6 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import styles from './Post.module.css';
-import { Col, message, Row } from 'antd';
+import { Col, Row } from 'antd';
 import { LikeOutlined } from '@ant-design/icons';
 import { AppDispatchType, AppStateType } from '../../../../Redux/redux-store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ type PostPropsType = {
     userPhoto: string | null | undefined
 }
 
-const Post: FC<PostPropsType> = ({id,message,likesCount, isLiked, userPhoto}) => {
+const Post: FC<PostPropsType> = ({ id, message, likesCount, isLiked, userPhoto }) => {
     const dispatch: AppDispatchType = useDispatch();
     const onClickLikeHandler = () => {
         if (!isLiked) {
@@ -39,8 +39,8 @@ const Post: FC<PostPropsType> = ({id,message,likesCount, isLiked, userPhoto}) =>
                 </Col>
                 <Col span={23}>
                     <div className={styles.likesCounterWrapper}>
-                        <LikeOutlined onClick={onClickLikeHandler} 
-                        className={`${styles.likeIcon} ${isLiked && styles.likedPost}`} 
+                        <LikeOutlined onClick={onClickLikeHandler}
+                            className={`${styles.likeIcon} ${isLiked && styles.likedPost}`}
                         /> {likesCount}
                     </div>
                 </Col>

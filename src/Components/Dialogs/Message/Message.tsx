@@ -1,12 +1,9 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { DialogType } from '../../../Redux/dialogs-reducer';
-import { getUserProfileThunkCreator } from '../../../Redux/profile-reducer';
 import styles from './../Dialogs.module.css';
 import userPhoto from '../../../../src/assets/images/user.png'
-import { useDispatch, useSelector } from 'react-redux';
-import { selectAuthorizedUserId } from '../../../Redux/selectors/auth-selectors';
+import { useSelector } from 'react-redux';
 import { selectProfilePhoto } from '../../../Redux/selectors/profile-selectors'
-import { AppDispatchType } from '../../../Redux/redux-store';
 
 type MessageType = {
     message: {
@@ -39,7 +36,9 @@ const Message: FC<MessagePropsType> = ({authorizedUserId, message, dialogPhoto})
             } 
             <span className={styles.sanderName}>{message.senderName}</span>
             </div>
-            <div className={`${authorizedUserId === message.senderId ? styles.messageBodyOfSender : styles.messageBody}`}>{message.body}</div>
+            <div className={`${authorizedUserId === message.senderId 
+                ? styles.messageBodyOfSender 
+                : styles.messageBody}`}>{message.body}</div>
             
         </div>
     );

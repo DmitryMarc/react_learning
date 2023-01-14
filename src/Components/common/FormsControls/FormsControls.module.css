@@ -1,13 +1,13 @@
 .formControl.error input,
-.formControl.error textarea{
+.formControl.error textarea {
     border: 2px solid red;
 }
 
-.formControl.error span{
+.formControl.error span {
     color: red;
 }
 
-.formSummaryError{
+.formSummaryError {
     border: 1px solid red;
     padding: 5px;
     color: red;
@@ -40,6 +40,7 @@
 
 .input:not([type='checkbox']):hover,
 .textarea:hover {
-    border: 1px solid transparent;;
+    border: 1px solid transparent;
+    ;
     outline: 1px solid rgb(103, 103, 153);
 }

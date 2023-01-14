@@ -1,4 +1,7 @@
-import usersReducer, { InitialStateType, actionCreators, followTC, unfollowTC } from './users-reducer';
+import usersReducer, {
+    InitialStateType, actionCreators,
+    followTC, unfollowTC
+} from './users-reducer';
 import { usersAPI } from '../api/users-api';
 import { APIResponseType, ResultCodesEnum } from '../api/api';
 //"замокай" объект, который возвращается из '../api/users-api'
@@ -56,7 +59,8 @@ beforeEach(() => {
 })
 
 test("follow success", () => {
-    const newState = usersReducer(state, actionCreators.followSuccessActionCreator(1));
+    const newState = usersReducer(state,
+        actionCreators.followSuccessActionCreator(1));
 
     // проверяем, что followed = false
     expect(newState.users[0].followed).toBeFalsy();
@@ -65,7 +69,8 @@ test("follow success", () => {
 });
 
 test("unfollow success", () => {
-    const newState = usersReducer(state, actionCreators.unfollowSuccessActionCreator(3));
+    const newState = usersReducer(state,
+        actionCreators.unfollowSuccessActionCreator(3));
 
     expect(newState.users[2].followed).toBeTruthy();
     expect(newState.users[1].followed).toBeFalsy();
@@ -86,9 +91,12 @@ test("success follow thunk", async () => {
     //toBeCalledTimes сколько раз вызвана функция
     expect(dispatchMock).toBeCalledTimes(3);
     // "toHaveBeenCalledWith(номер вызова, {})" проверяет, что какой-то определённый вызов был сделан с определённым объектом
-    expect(dispatchMock).toHaveBeenNthCalledWith(1, actionCreators.toggleFollowingProgressActionCreator(true, 1));
-    expect(dispatchMock).toHaveBeenNthCalledWith(2, actionCreators.followSuccessActionCreator(1));
-    expect(dispatchMock).toHaveBeenNthCalledWith(3, actionCreators.toggleFollowingProgressActionCreator(false, 1));
+    expect(dispatchMock).toHaveBeenNthCalledWith(1,
+        actionCreators.toggleFollowingProgressActionCreator(true, 1));
+    expect(dispatchMock).toHaveBeenNthCalledWith(2,
+        actionCreators.followSuccessActionCreator(1));
+    expect(dispatchMock).toHaveBeenNthCalledWith(3,
+        actionCreators.toggleFollowingProgressActionCreator(false, 1));
 });
 
 test("success unfollow thunk", async () => {
@@ -102,7 +110,10 @@ test("success unfollow thunk", async () => {
     // наши ожидания от теста
     expect(dispatchMock).toBeCalledTimes(3);
 
-    expect(dispatchMock).toHaveBeenNthCalledWith(1, actionCreators.toggleFollowingProgressActionCreator(true, 1));
-    expect(dispatchMock).toHaveBeenNthCalledWith(2, actionCreators.unfollowSuccessActionCreator(1));
-    expect(dispatchMock).toHaveBeenNthCalledWith(3, actionCreators.toggleFollowingProgressActionCreator(false, 1));
+    expect(dispatchMock).toHaveBeenNthCalledWith(1,
+        actionCreators.toggleFollowingProgressActionCreator(true, 1));
+    expect(dispatchMock).toHaveBeenNthCalledWith(2,
+        actionCreators.unfollowSuccessActionCreator(1));
+    expect(dispatchMock).toHaveBeenNthCalledWith(3,
+        actionCreators.toggleFollowingProgressActionCreator(false, 1));
 });

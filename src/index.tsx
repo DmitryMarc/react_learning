@@ -1,14 +1,12 @@
 import reportWebVitals from './reportWebVitals';
-// import store from './Redux/redux-store';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-// import { BrowserRouter } from 'react-router-dom';
 import ReactJSApp from './App';
 
 ReactDOM.render(
     <React.StrictMode>
-       <ReactJSApp />
+        <ReactJSApp />
     </React.StrictMode>,
     document.getElementById('root')
 );

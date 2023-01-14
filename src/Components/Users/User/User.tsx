@@ -28,33 +28,34 @@ const User: FC<UserPropsType> = ({ user }) => {
                     </NavLink>
                 </span>
                 <span>
-                <div className={styles.userInformation}>
-                    <span>
-                        <span>{user.name}</span>
-                        <span>{user.status}</span>
-                    </span>
-                    <span>
-                        <div>{"user.location.country"}</div>
-                        <div>{"user.location.city"}</div>
-                    </span>
-                </div>
+                    <div className={styles.userInformation}>
+                        <span>
+                            <span>{user.name}</span>
+                            <span>{user.status}</span>
+                        </span>
+                        <span>
+                            <div>{"user.location.country"}</div>
+                            <div>{"user.location.city"}</div>
+                        </span>
+                    </div>
                 </span>
             </span>
             <div>
-                    {user.followed
-                        ? <button className={styles.userFollowUnfollowBtn} disabled={followingInProgress.some(id =>
+                {user.followed
+                    ? <button className={styles.userFollowUnfollowBtn}
+                        disabled={followingInProgress.some(id =>
                             id === user.id)} onClick={() => {
                                 dispatch(unfollowTC(user.id));
                             }}>Unfollow <CheckOutlined /></button>
-                        : <button className={styles.userFollowUnfollowBtn} disabled={followingInProgress.some(id =>
+                    : <button className={styles.userFollowUnfollowBtn}
+                        disabled={followingInProgress.some(id =>
                             id === user.id)} onClick={() => {
                                 dispatch(followTC(user.id));
                             }}>Follow <PlusOutlined /></button>
-                    }
-                    </div>
+                }
+            </div>
         </div>
     )
 }
 
 export default User;
-

@@ -26,12 +26,14 @@ const usersReducer = (state = initialState, action: ActionsTypes): InitialStateT
         case 'USERS/FOLLOW':
             return {
                 ...state,
-                users: updateObjectInArray(state.users, action.userId, "id", { followed: true })
+                users: updateObjectInArray(state.users, action.userId,
+                    "id", { followed: true })
             };
         case 'USERS/UNFOLLOW':
             return {
                 ...state,
-                users: updateObjectInArray(state.users, action.userId, "id", { followed: false })
+                users: updateObjectInArray(state.users, action.userId,
+                    "id", { followed: false })
             };
         case 'USERS/SET_USERS':
             return {
@@ -88,7 +90,7 @@ export const actionCreators = {
         ({ type: 'USERS/SET_CURRENT_PAGE', currentPage } as const),
     setPageSizeActionCreator: (pageSize: number) =>
         ({ type: 'USERS/SET_PAGE_SIZE', pageSize } as const),
-    setFilterActionCreator: (filter:FilterType) =>
+    setFilterActionCreator: (filter: FilterType) =>
         ({ type: 'USERS/SET_FILTER', payload: filter } as const),
     setUsersTotalCountActionCreator: (totalUsersCount: number) =>
         ({ type: 'USERS/SET_TOTAL_USERS_COUNT', count: totalUsersCount } as const),
@@ -108,7 +110,7 @@ export const requestUsersThunkCreator = (page: number, pageSize: number, filter:
         dispatch(actionCreators.setCurrentPageActionCreator(page));
         dispatch(actionCreators.setFilterActionCreator(filter));
 
-        let data = await usersAPI.getUsers(page, pageSize, filter.term, filter.friend);
+        const data = await usersAPI.getUsers(page, pageSize, filter.term, filter.friend);
         dispatch(actionCreators.toggleIsFetchingActionCreator(false));
         dispatch(actionCreators.setUsersActionCreator(data.items));
         dispatch(actionCreators.setUsersTotalCountActionCreator(data.totalCount));
@@ -119,7 +121,7 @@ const _followUnfollowFlow = async (dispatch: Dispatch<ActionsTypes>, userId: num
     apiMethod: (userId: number) => Promise<APIResponseType>, actionCreator: (userId: number) =>
         ActionsTypes) => {
     dispatch(actionCreators.toggleFollowingProgressActionCreator(true, userId));
-    let response = await apiMethod(userId);
+    const response = await apiMethod(userId);
 
     if (response.resultCode === ResultCodesEnum.Success) {
         dispatch(actionCreator(userId));
@@ -131,8 +133,8 @@ const _followUnfollowFlow = async (dispatch: Dispatch<ActionsTypes>, userId: num
 export const followTC = (userId: number): ThunkType => {
     //return Thunk
     return async (dispatch) => {
-        let apiMethod = usersAPI.follow.bind(usersAPI);
-        let actionCreator = actionCreators.followSuccessActionCreator;
+        const apiMethod = usersAPI.follow.bind(usersAPI);
+        const actionCreator = actionCreators.followSuccessActionCreator;
         await _followUnfollowFlow(dispatch, userId, apiMethod, actionCreator);
     }
 }
@@ -142,9 +144,9 @@ export const unfollowTC = (userId: number): ThunkType => {
     //return Thunk
     return async (dispatch) => {
         //аналог предыдущей санки, но без использования переменных
-        await _followUnfollowFlow(dispatch, userId, usersAPI.unfollow.bind(usersAPI), actionCreators.unfollowSuccessActionCreator);
+        await _followUnfollowFlow(dispatch, userId, usersAPI.unfollow.bind(usersAPI),
+            actionCreators.unfollowSuccessActionCreator);
     }
 }
 
 export default usersReducer;
-

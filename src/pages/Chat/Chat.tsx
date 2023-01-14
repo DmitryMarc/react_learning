@@ -7,6 +7,7 @@ import { selectChatMessages, selectStatusWS } from "../../Redux/selectors/chat-s
 import { AutoComplete, Input, Button, Row, Col, Divider } from 'antd';
 import { selectAuthorizedUserId, selectIsAuth } from "../../Redux/selectors/auth-selectors";
 import { Redirect, useHistory } from "react-router-dom";
+import Preloader from "../../Components/common/Preloader/Preloader";
 
 export const Messages: FC = () => {
     const messages = useSelector(selectChatMessages);
@@ -30,6 +31,9 @@ export const Messages: FC = () => {
         }
     }, [messages])
 
+    if (!messages) {
+        return <Preloader />
+    }
     return (
         <div style={{ height: '600px', overflowY: 'auto' }} onScroll={scrollHandler}>
             {messages.map((message, index) => <Message key={message.id} message={message} />)}
@@ -72,8 +76,6 @@ export const AddMessageForm: FC = () => {
             <Row style={{ margin: "10px 0 0 0" }}>
                 <Col span={6}>
                     <div>
-                        {/* <textarea onChange={(e) => setMessage(e.currentTarget.value)}
-                    value={message}></textarea> */}
                         <AutoComplete
                             style={{ width: "100%" }}
                             value={message}
@@ -93,8 +95,6 @@ export const AddMessageForm: FC = () => {
             <Row style={{ margin: "5px 0 0 0" }}>
                 <Col span={6}>
                     <div>
-                        {/* <button disabled={status !== 'ready'}
-                    onClick={sendMessageHandler}>Send</button> */}
                         <Button disabled={status !== 'ready'}
                             onClick={sendMessageHandler} style={{ float: "right" }}>Send</Button>
                     </div>

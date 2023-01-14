@@ -2,16 +2,16 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { reset } from 'redux-form';
-import { InitialStateType, sendMessageThunkCreator, setMessagesWithUserThunkCreator } from '../../../Redux/dialogs-reducer';
+import { InitialStateType, sendMessageThunkCreator, setMessagesWithUserThunkCreator }
+    from '../../../Redux/dialogs-reducer';
 import { getUserProfileThunkCreator } from '../../../Redux/profile-reducer';
 import { AppDispatchType } from '../../../Redux/redux-store';
 import { selectAuthorizedUserId } from '../../../Redux/selectors/auth-selectors';
-import { selectProfilePhoto } from '../../../Redux/selectors/profile-selectors';
+import Preloader from '../../common/Preloader/Preloader';
 import { AddMessageFormRedux } from '../Dialogs';
 import styles from './../Dialogs.module.css';
 import Message from './Message';
 
-// type MessagesPropsType =  Pick<InitialStateType, "messages">;
 type DialogsType = Pick<InitialStateType, "dialogs">['dialogs'];
 
 type ParamsType = { userId: string };
@@ -37,14 +37,10 @@ const Messages: FC<InitialStateType> = (props) => {
     const authorizedUserId = useSelector(selectAuthorizedUserId);
     const params: ParamsType = useParams();
 
-    let currentDialog = getCurrentDialog(dialogs, params);
+    const currentDialog = getCurrentDialog(dialogs, params);
 
     const messagesAnchorRef = useRef<HTMLDivElement>(null);
     const [isAutoScroll, setIsAutoScroll] = useState(true);
-    // Чтобы не было бага c формой отправки сообщения после перезагрузки страницы
-    useEffect(() => {
-        dispatch(setMessagesWithUserThunkCreator(+params.userId));
-    }, [])
 
     const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
         const element = e.currentTarget;
@@ -55,10 +51,16 @@ const Messages: FC<InitialStateType> = (props) => {
             isAutoScroll && setIsAutoScroll(false);
         }
     }
-    useEffect(()=>{
-        if (authorizedUserId)
-        dispatch(getUserProfileThunkCreator(authorizedUserId));
-    },[])
+
+    useEffect(() => {
+        // Чтобы не было бага c формой отправки сообщения после перезагрузки страницы
+        dispatch(setMessagesWithUserThunkCreator(+params.userId));
+
+        if (authorizedUserId) {
+            dispatch(getUserProfileThunkCreator(authorizedUserId));
+        }
+    }, [])
+
     useEffect(() => {
         if (isAutoScroll) {
             // Скроллинг при изменении сообщений
@@ -67,11 +69,16 @@ const Messages: FC<InitialStateType> = (props) => {
     }, [messages])
 
     let messagesElements = messages.map(message =>
-        <Message authorizedUserId={authorizedUserId} dialogPhoto={currentDialog?.photos} message={message} key={message.id} />
+        <Message authorizedUserId={authorizedUserId} dialogPhoto={currentDialog?.photos}
+            message={message} key={message.id} />
     );
-    let addNewMessage = async (values: NewMessageFormValuesType) => {
+    const addNewMessage = async (values: NewMessageFormValuesType) => {
         dispatch(sendMessageThunkCreator(+params.userId, values.newMessageBody));
         dispatch(reset('dialogAddMessageForm'));
+    }
+
+    if (!messages) {
+        return <Preloader />
     }
     return (
         <>

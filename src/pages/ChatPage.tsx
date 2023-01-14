@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { startMessagesListeningTC, stopMessagesListeningTC
+import {
+    startMessagesListeningTC, stopMessagesListeningTC
 } from "../Redux/chat-reducer";
 import { AppDispatchType } from "../Redux/redux-store";
 import { selectStatusWS } from "../Redux/selectors/chat-selectors";
@@ -27,7 +28,8 @@ const Chat: FC = () => {
 
     return (
         <div>
-            {status === "error" && <div>Some error occured. Please refresh the page</div>}
+            {status === "error" &&
+                <div>Some error occured. Please refresh the page</div>}
             <>
                 <Messages />
                 <AddMessageForm />

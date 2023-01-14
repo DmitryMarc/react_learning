@@ -5,16 +5,14 @@ import {
     getStatusThunkCreator,
     getUserProfileThunkCreator,
 } from '../../Redux/profile-reducer';
-import { AppDispatchType, AppStateType } from '../../Redux/redux-store';
+import { AppDispatchType } from '../../Redux/redux-store';
 import ProfileInfo from './ProfileInfo/ProfileInfo';
 import MyPosts from './MyPosts/MyPosts';
 import { selectAuthorizedUserId } from '../../Redux/selectors/auth-selectors';
 import { Col, Row } from 'antd';
 
 export const Profile: FC<RouteComponentProps<{ userId: string }>> = (props) => {
-    let authorizedUserId = useSelector(selectAuthorizedUserId);
-    // const isAuth = useSelector((state:AppStateType) => state.auth.isAuth);
-
+    const authorizedUserId = useSelector(selectAuthorizedUserId);
     const dispatch: AppDispatchType = useDispatch();
 
     const refreshProfile = () => {
@@ -40,12 +38,10 @@ export const Profile: FC<RouteComponentProps<{ userId: string }>> = (props) => {
     }, [])
 
     useEffect(() => {
-        //if (this.props.match.params.userId != prevProps.match.params.userId) {
         refreshProfile();
     }, [props.match.params.userId])
 
     const isOwner: boolean = +props.match.params.userId === authorizedUserId;
-
     return (
         <Row gutter={[1, 0]}>
             <Col span={12}>

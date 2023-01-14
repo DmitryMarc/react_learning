@@ -1,4 +1,3 @@
-import { message } from "antd";
 import { FormAction } from "redux-form";
 import { chatAPI, ChatMessageAPIType, StatusType } from "../api/chat-api";
 import { AppDispatchType, BaseThunkType, InferActionsTypes } from "./redux-store";
@@ -12,7 +11,6 @@ let initialState = {
 type InitialStateType = typeof initialState;
 
 type ChatMessageType = ChatMessageAPIType & {id: string};
-
 
 const chatReducer = (state = initialState, action:ActionsTypes): InitialStateType => {
     switch (action.type) {

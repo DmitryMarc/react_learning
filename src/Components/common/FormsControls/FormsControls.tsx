@@ -33,15 +33,15 @@ export const Input: FC<WrappedFieldProps> = (props) => {
     const { input, meta, ...restProps } = props;
     return (
         <FormControl {...props}>
-            <input  className={styles.input} {...input} {...restProps} />
+            <input className={styles.input} {...input} {...restProps} />
         </FormControl>
     )
 }
 
 export function createField<FormKeysType extends string>(
-    placeholder: string | undefined, 
+    placeholder: string | undefined,
     name: FormKeysType,
-    validators: Array<FieldValidatorType>, 
+    validators: Array<FieldValidatorType>,
     component: FC<WrappedFieldProps>,
     props = {}, text = "") {
     return (
@@ -53,8 +53,3 @@ export function createField<FormKeysType extends string>(
 }
 
 export type GetStringKeysType<T> = Extract<keyof T, string>;
-
-
-
-
-

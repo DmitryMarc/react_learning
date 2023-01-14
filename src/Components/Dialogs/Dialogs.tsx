@@ -13,6 +13,7 @@ import { dialogsAPI } from '../../api/dialogs-api';
 import { Route } from 'react-router-dom';
 import Messages from './Message/Messages';
 import { Button, Col, Row } from 'antd';
+import Preloader from '../common/Preloader/Preloader';
 
 type NewMessageFormValuesType = {
     newMessageBody: string
@@ -33,8 +34,13 @@ const Dialogs: FC = () => {
     }, [messages])
 
     let dialogsElements = dialogs.map(dialog =>
-        <DialogItem name={dialog.userName} key={dialog.id} id={dialog.id} photo={dialog.photos.small} />
+        <DialogItem name={dialog.userName} key={dialog.id}
+            id={dialog.id} photo={dialog.photos.small} />
     );
+
+    if (!dialogs) {
+        return <Preloader />
+    }
 
     return (
         <div className={classes.dialogs}>
@@ -45,13 +51,15 @@ const Dialogs: FC = () => {
             </div>
             <div className={classes.messages}>
                 <div>
-                    <Route path='/dialogs/:userId/messages' render={() => <Messages dialogs={dialogs} messages={messages} />} />
+                    <Route path='/dialogs/:userId/messages' render={() =>
+                        <Messages dialogs={dialogs} messages={messages} />} />
                 </div>
             </div>
         </div>
     );
 }
 
+// Может уберу или изменю
 const maxLength50 = maxLengthCreator(50);
 
 type NewMessageFormValuesKeysType = Extract<keyof NewMessageFormValuesType, string>;
@@ -67,16 +75,15 @@ const AddMessageForm: FC<InjectedFormProps<NewMessageFormValuesType,
             <form onSubmit={props.handleSubmit}>
                 <Row>
                     <Col span={12}>
-                        <div style={{width: '600px', marginTop: '20px',  padding: '0 10px'}}>
+                        <div style={{ width: '600px', marginTop: '20px', padding: '0 10px' }}>
                             {createField<NewMessageFormValuesKeysType>("Enter your message",
-                            "newMessageBody", [required, maxLength50], Textarea)}
+                                "newMessageBody", [required, maxLength50], Textarea)}
                         </div>
                     </Col>
                     <Col span={12}></Col>
                     <Col span={12}>
-                        {/* <div><button>Send</button></div> */}
-                        <div style={{width: '600px', paddingRight: '10px'}}>
-                            <Button htmlType='submit' style={{ float: 'right'}}>Send</Button>
+                        <div style={{ width: '600px', paddingRight: '10px' }}>
+                            <Button htmlType='submit' style={{ float: 'right' }}>Send</Button>
                         </div>
                     </Col>
                 </Row>
@@ -89,6 +96,3 @@ export const AddMessageFormRedux = reduxForm<NewMessageFormValuesType, PropsType
 })(AddMessageForm)
 
 export default withAuthRedirect(Dialogs);
-
-// Стилизовать форму отправки !
-// Продумать архитектуру диалогов !

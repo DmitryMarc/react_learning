@@ -99,7 +99,7 @@ export const Users: FC<PropsType> = (props) => {
     useEffect(() => {
         dispatch(requestUsersThunkCreator(currentPage, pageSize, filter));
     }, [currentPage, pageSize])
-    
+
     return (
         <div>
             <h2>{props.pageTitle}</h2>
@@ -107,9 +107,11 @@ export const Users: FC<PropsType> = (props) => {
                 <>
                     <UsersSearchForm onFilterChanged={onFilterChanged} />
                     {users.length > 0 &&
-                        <Pagination defaultCurrent={1} current={currentPage} total={totalUsersCount}
-                            onChange={onPageChanged} pageSize={pageSize} onShowSizeChange={onShowSizeChange}
-                            pageSizeOptions={[5, 10, 20, 50, 100]} style={{ margin: '20px 0' }} size={'small'} />
+                        <Pagination defaultCurrent={1} current={currentPage}
+                            total={totalUsersCount} onChange={onPageChanged}
+                            pageSize={pageSize} onShowSizeChange={onShowSizeChange}
+                            pageSizeOptions={[5, 10, 20, 50, 100]}
+                            style={{ margin: '20px 0' }} size={'small'} />
                     }
                     {/* <Paginator currentPage={currentPage} onPageChanged={onPageChanged}
                         totalItemsCount={totalUsersCount} pageSize={pageSize} /> */}
@@ -119,9 +121,11 @@ export const Users: FC<PropsType> = (props) => {
                         }
                     </div>
                     {pageSize > 5 && users.length > 0 &&
-                        <Pagination defaultCurrent={1} current={currentPage} total={totalUsersCount}
-                            onChange={onPageChanged} pageSize={pageSize} onShowSizeChange={onShowSizeChange}
-                            pageSizeOptions={[5, 10, 20, 50, 100]} style={{ margin: '30px 0 0 0' }} size={'small'} />
+                        <Pagination defaultCurrent={1} current={currentPage}
+                            total={totalUsersCount} onChange={onPageChanged}
+                            pageSize={pageSize} onShowSizeChange={onShowSizeChange}
+                            pageSizeOptions={[5, 10, 20, 50, 100]}
+                            style={{ margin: '30px 0 0 0' }} size={'small'} />
                     }
                 </>
             }

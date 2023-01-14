@@ -56,12 +56,6 @@ const ProfileDataForm: FC<InjectedFormProps<ProfileType, ProfileDataFormPropsTyp
                     })}
                 </div>
                 <div>
-                    {/* <button className={stylesDataForm.saveBtn} onClick={() => {
-                        //если данные контактов есть
-                        if (profile.contacts) {
-                            setIsContacts(true)
-                        }
-                    }}>save</button> */}
                     <Button htmlType="submit" onClick={() => {
                         //если данные контактов есть
                         if (profile.contacts) {

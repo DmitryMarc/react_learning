@@ -43,7 +43,8 @@ describe("ProfileStatus component", () => {
 
   test("callback should be called", () => {
     const mockCallback = jest.fn(); //фейковая функция
-    const component = create(<ProfileStatus status="it-kamasutra.com" updateStatus ={mockCallback} />);
+    const component = create(<ProfileStatus status="it-kamasutra.com"
+      updateStatus={mockCallback} />);
     const instance = component.getInstance();
     //@ts-ignore
     instance?.deactivateEditMode();

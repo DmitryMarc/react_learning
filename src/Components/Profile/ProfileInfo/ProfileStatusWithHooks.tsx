@@ -9,7 +9,7 @@ type ProfileStatusPropsType = {
     isOwner: boolean
 }
 
-const ProfileStatusWithHooks: FC<ProfileStatusPropsType> = ({isOwner}) => {
+const ProfileStatusWithHooks: FC<ProfileStatusPropsType> = ({ isOwner }) => {
     let globalStatus = useSelector(selectStatus);
     let [editMode, setEditMode] = useState(false);
     let [status, setStatus] = useState(globalStatus);
@@ -35,7 +35,7 @@ const ProfileStatusWithHooks: FC<ProfileStatusPropsType> = ({isOwner}) => {
     const onStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
         setStatus(e.currentTarget.value);
     }
-    
+
     return (
         <div>
             {!editMode &&

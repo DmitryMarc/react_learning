@@ -1,15 +1,15 @@
-.dialogs{
+.dialogs {
     display: grid;
     grid-template-columns: 2fr 10fr;
 }
 
-.dialogsItemsWrapper{
+.dialogsItemsWrapper {
     width: 300px;
     height: 600px;
     overflow: hidden;
 }
 
-.dialogsItems{
+.dialogsItems {
     width: 100%;
     height: 100%;
     padding: 0 20px 0 20px;
@@ -18,11 +18,11 @@
     box-sizing: content-box;
 }
 
-.dialogsItems > .active{
+.dialogsItems > .active {
     color: gold;
 }
 
-.dialog a{
+.dialog a {
     display: inline-block;
     padding: 5px 0;
     margin: 5px 0;
@@ -30,7 +30,7 @@
     text-decoration: none;
 }
 
-.messagesWrapper{
+.messagesWrapper {
     height: 500px;
     display: flex;
     flex-direction: column;
@@ -38,14 +38,14 @@
     overflow: hidden;
 }
 
-.messages{
+.messages {
     width: 600px;
     overflow-y: auto;
-    padding-right: 17px; /* Increase/decrease this value for cross-browser compatibility */
+    padding-right: 17px;
     box-sizing: content-box;
 }
 
-.message{
+.message {
     padding: 10px;
 }
 
@@ -55,19 +55,19 @@
     align-items: center;
 }
 
-.sanderName{
+.sanderName {
     padding: 0 5px;
     vertical-align: middle;
 }
 
-.messageBody{
+.messageBody {
     padding: 10px;
     margin: 5px 60% 0 20px;
     background-color: antiquewhite;
     border-radius: 0 10px 10px 10px;
 }
 
-.messageBodyOfSender{
+.messageBodyOfSender {
     padding: 10px;
     margin: 5px 20px 0 60%;
     text-align: end;
@@ -75,7 +75,3 @@
     border-radius: 10px 0 10px 10px;
     word-wrap: break-word;
 }
-
-/* .message{
-    color: white;
-} */

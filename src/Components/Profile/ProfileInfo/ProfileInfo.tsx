@@ -13,12 +13,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatchType } from '../../../Redux/redux-store';
 import { selectProfile } from '../../../Redux/selectors/profile-selectors';
 import { UploadOutlined } from '@ant-design/icons';
-import styles from './ProfileInfo.module.css'
-import { EditOutlined } from '@ant-design/icons'
-import { selectIsAuth } from '../../../Redux/selectors/auth-selectors';
+import styles from './ProfileInfo.module.css';
+import { EditOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { addNewDialogThunkCreator, setMessagesWithUserThunkCreator } from '../../../Redux/dialogs-reducer';
+import { addNewDialogThunkCreator, setMessagesWithUserThunkCreator }
+    from '../../../Redux/dialogs-reducer';
 
 type ProfileInfoPropsType = {
     isOwner: boolean,
@@ -27,13 +27,9 @@ type ProfileInfoPropsType = {
 const ProfileInfo: FC<ProfileInfoPropsType> = ({ isOwner }) => {
     // Для отображения состояния контактов (вынесли сюда, чтобы работать с двумя дочерними компонентами)
     const [isContacts, setIsContacts] = useState<boolean>(false);
-    let profile = useSelector(selectProfile);
-    let [editMode, setEditMode] = useState(false);
-    let dispatch: AppDispatchType = useDispatch();
-    // Нельзя так использовать, т.к. ниже есть хук
-    // if (!profile) {
-    //     return <Preloader />
-    // }
+    const profile = useSelector(selectProfile);
+    const [editMode, setEditMode] = useState(false);
+    const dispatch: AppDispatchType = useDispatch();
 
     const onMainPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files?.length) {
@@ -49,37 +45,32 @@ const ProfileInfo: FC<ProfileInfoPropsType> = ({ isOwner }) => {
         setEditMode(false);
     }, [profile])
 
+    if (!profile) {
+        return <Preloader />
+    }
     return (
         <div>
-            {!profile ? <Preloader /> :
-                <div>
-                    <div className={styles.descriptionBlock}>
-                        <div className={styles.photo}>
-                            <img src={profile.photos.small || userPhoto}
-                                className={styles.mainPhoto} />
-                            {/* {isOwner && <input type={"file"} onChange={onMainPhotoSelected} />} */}
-                            {isOwner &&
-                                <label className={styles.uploadIconWrapper}>
-                                    <input name="file" type="file" className={styles.uploadFile}
-                                        onChange={onMainPhotoSelected} />
-                                    <span className={styles.uploadIconWrapper}><UploadOutlined
-                                        className={styles.uploadIcon} /></span>
-                                </label>
-                            }
-                        </div>
-
-                        {editMode
-                            ? <ProfileDataForm initialValues={profile}
-                                profile={profile} onSubmit={onSubmit} setIsContacts={setIsContacts} />
-                            : <ProfileData profile={profile} isOwner={isOwner}
-                                goToEditMode={() => { setEditMode(true) }}
-                                isContacts={isContacts} setIsContacts={setIsContacts} />
-                        }
-
-                        {/* <ProfileStatusWithHooks /> */}
-                    </div>
+            <div className={styles.descriptionBlock}>
+                <div className={styles.photo}>
+                    <img src={profile.photos.small || userPhoto}
+                        className={styles.mainPhoto} />
+                    {isOwner &&
+                        <label className={styles.uploadIconWrapper}>
+                            <input name="file" type="file" className={styles.uploadFile}
+                                onChange={onMainPhotoSelected} />
+                            <span className={styles.uploadIconWrapper}><UploadOutlined
+                                className={styles.uploadIcon} /></span>
+                        </label>
+                    }
                 </div>
-            }
+                {editMode
+                    ? <ProfileDataForm initialValues={profile}
+                        profile={profile} onSubmit={onSubmit} setIsContacts={setIsContacts} />
+                    : <ProfileData profile={profile} isOwner={isOwner}
+                        goToEditMode={() => { setEditMode(true) }}
+                        isContacts={isContacts} setIsContacts={setIsContacts} />
+                }
+            </div>
         </div>
     );
 }
@@ -95,11 +86,8 @@ type ProfileDataPropsType = {
 const ProfileData: FC<ProfileDataPropsType> = ({ profile, isOwner,
     goToEditMode, isContacts, setIsContacts }) => {
     const dispatch: AppDispatchType = useDispatch();
-    const params: {userId: string} = useParams();
+    const params: { userId: string } = useParams();
     const history = useHistory();
-    // if (!isOwner) {
-    //     return <Preloader />
-    // }
 
     // Чтобы "обнулялся" state при вымонтировании компонента (аналог componentWillUnmount)
     useEffect(() => {
@@ -111,6 +99,7 @@ const ProfileData: FC<ProfileDataPropsType> = ({ profile, isOwner,
         history.push(`/dialogs/${+params.userId}/messages`);
         dispatch(setMessagesWithUserThunkCreator(+params.userId));
     }
+
     return (
         <div className={styles.profileInformation}>
             <div className={styles.fullName}>
@@ -144,9 +133,9 @@ const ProfileData: FC<ProfileDataPropsType> = ({ profile, isOwner,
                 })}
             </div>
             {!isOwner &&
-            <div className={styles.informationItem}>
-                <Button onClick={onClickHandler}>Write message</Button>
-            </div>
+                <div className={styles.informationItem}>
+                    <Button onClick={onClickHandler}>Write message</Button>
+                </div>
             }
         </div>
     )

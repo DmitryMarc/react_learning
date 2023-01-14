@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from 'formik';
-import { FC, memo, useRef } from 'react';
+import { FC, memo } from 'react';
 import { useSelector } from 'react-redux';
 import { FilterType } from '../../Redux/users-reducer';
 import { getUsersFilter } from '../../Redux/selectors/users-selectors';
@@ -26,13 +26,11 @@ export const UsersSearchForm: FC<UserSearchFormPropsType> = memo((props) => {
 
     const submit = (values: FormType, { setSubmitting }:
         { setSubmitting: (isSubmitting: boolean) => void }) => {
-        // setTimeout(() => {
-        //     alert(JSON.stringify(values, null, 2));
-        //     setSubmitting(false);
-        // }, 400);
         const filter: FilterType = {
             term: values.term,
-            friend: values.friend === "null" ? null : values.friend === "true" ? true : false
+            friend: values.friend === "null"
+                ? null : values.friend === "true"
+                    ? true : false
         }
         props.onFilterChanged(filter);
         setSubmitting(false);
@@ -53,28 +51,27 @@ export const UsersSearchForm: FC<UserSearchFormPropsType> = memo((props) => {
                         <Field class={styles.searchUsers} placeholder="input here"
                             type="text" name="term" />
                         <button className={styles.searchButton} type="submit"
-                            disabled={isSubmitting || (values.term === filter.term && values.friend === String(filter.friend))}>
+                            disabled={isSubmitting || (values.term === filter.term
+                                && values.friend === String(filter.friend))}>
                             <SearchOutlined />
                         </button>
-                        {/* <Field name="friend" as="select">
-                            <option value="null">All</option>
-                            <option value="true">Only followed</option>
-                            <option value="false">Only unfollowed</option>
-                        </Field> */}
 
                         <div className={styles.filterGroup}>
-                            <h3 id="my-radio-group">Фильтр пользователей</h3>
+                            <h3 id="my-radio-group">Filter of users</h3>
                             <div role="group" aria-labelledby="my-radio-group">
                                 <label className={styles.filterUsersItem}>
-                                    <Field type="radio" name="friend" value="null" class={styles.filterRadioBtn} />
+                                    <Field type="radio" name="friend" value="null"
+                                        class={styles.filterRadioBtn} />
                                     All
                                 </label>
                                 <label className={styles.filterUsersItem}>
-                                    <Field type="radio" name="friend" value="true" class={styles.filterRadioBtn} />
+                                    <Field type="radio" name="friend" value="true"
+                                        class={styles.filterRadioBtn} />
                                     Only followed
                                 </label>
                                 <label className={styles.filterUsersItem}>
-                                    <Field type="radio" name="friend" value="false" class={styles.filterRadioBtn} />
+                                    <Field type="radio" name="friend" value="false"
+                                        class={styles.filterRadioBtn} />
                                     Only unfollowed
                                 </label>
                             </div>

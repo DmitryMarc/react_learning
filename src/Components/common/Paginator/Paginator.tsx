@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-// Ts не видит файлы с отличными от ts, tsx расширениями (.css, .scss, .sass, .png, .jpeg и т.д.). Мы задекларированали расширение шайлов в "declaration.d.ts" Также можно временно игнорировать ошибку.
 import styles from './Paginator.module.css';
 
-type PropsType = { 
-    totalItemsCount: number, 
-    pageSize: number, 
-    currentPage?: number, 
-    onPageChanged?: (pageNumber:number) => void, 
-    portionSize?: number 
+type PropsType = {
+    totalItemsCount: number,
+    pageSize: number,
+    currentPage?: number,
+    onPageChanged?: (pageNumber: number) => void,
+    portionSize?: number
 }
 
-let Paginator:React.FC<PropsType> = ({ totalItemsCount, pageSize, currentPage = 1, onPageChanged = x => x, portionSize = 10 }) => {
+let Paginator: React.FC<PropsType> = ({ totalItemsCount, pageSize, currentPage = 1,
+    onPageChanged = x => x, portionSize = 10 }) => {
 
     let pagesCount = Math.ceil(totalItemsCount / pageSize);
 
@@ -34,8 +34,9 @@ let Paginator:React.FC<PropsType> = ({ totalItemsCount, pageSize, currentPage = 
             }
             {pages.filter(page => page >= leftPortionPageNumber
                 && page <= rightPortionPageNumber).map(page => {
-                    return <span className= {`${currentPage === page
-                        && styles.selectedPage} ${styles.pageNumber}`} onClick={() => { onPageChanged(page) }}>{page}</span>;
+                    return <span className={`${currentPage === page
+                        && styles.selectedPage} ${styles.pageNumber}`} onClick={
+                            () => { onPageChanged(page) }}>{page}</span>;
                 })}
             {portionCount > portionNumber &&
                 <button onClick={() => { setPortionNumber(portionNumber + 1) }}>NEXT</button>
@@ -45,4 +46,3 @@ let Paginator:React.FC<PropsType> = ({ totalItemsCount, pageSize, currentPage = 
 }
 
 export default Paginator;
-

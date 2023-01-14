@@ -33,10 +33,10 @@ const errorHandler = () => {
 }
 
 const cleanUp = () => {
-        ws?.removeEventListener('close', closeHandler);
-        ws?.removeEventListener('message', messageHandler);
-        ws?.removeEventListener('open', openHandler);
-        ws?.removeEventListener('error', errorHandler);
+    ws?.removeEventListener('close', closeHandler);
+    ws?.removeEventListener('message', messageHandler);
+    ws?.removeEventListener('open', openHandler);
+    ws?.removeEventListener('error', errorHandler);
 }
 
 // Вспомогательная функция
@@ -65,7 +65,7 @@ export const chatAPI = {
     startWSChahhel() {
         createChannel();
     },
-    stopWSChahhel(){
+    stopWSChahhel() {
         // Зануляем подписчиков
         subscribers['messages-received'] = [];
         subscribers['status-changed'] = [];
@@ -75,7 +75,7 @@ export const chatAPI = {
         ws?.close();
     },
     // подписка(подписчик)
-    subscribe(eventName: EventsNamesType, callback: MessagesReceivedSubscriberType | StatusChangedSubscriberType){
+    subscribe(eventName: EventsNamesType, callback: MessagesReceivedSubscriberType | StatusChangedSubscriberType) {
         //@ts-ignore
         subscribers[eventName].push(callback);
         // 1-ый способ отписки
@@ -85,12 +85,12 @@ export const chatAPI = {
         }
     },
     // 2-ой способ отписки
-    unsubscribe(eventName: EventsNamesType, callback: MessagesReceivedSubscriberType | StatusChangedSubscriberType){
+    unsubscribe(eventName: EventsNamesType, callback: MessagesReceivedSubscriberType | StatusChangedSubscriberType) {
         //@ts-ignore
         subscribers[eventName] = subscribers[eventName].filter(subscriber => subscriber !== callback);
     },
     // отправка сообщений
-    sendMessage(message: string){
+    sendMessage(message: string) {
         ws?.send(message);
     }
 }

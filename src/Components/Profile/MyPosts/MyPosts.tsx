@@ -3,13 +3,15 @@ import Post from './Post/Post';
 import React, { FC, useEffect, useState } from 'react';
 import { InjectedFormProps, reduxForm } from 'redux-form';
 import { required } from '../../../utils/validators/validators';
-import { createField, GetStringKeysType, Textarea } from '../../common/FormsControls/FormsControls';
-import { PostType } from '../../../types/types';
+import { createField, GetStringKeysType, Textarea }
+    from '../../common/FormsControls/FormsControls';
 import { actions } from '../../../Redux/profile-reducer';
 import { AppDispatchType } from '../../../Redux/redux-store';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPostsData, selectProfilePhoto } from '../../../Redux/selectors/profile-selectors';
+import { selectPostsData, selectProfilePhoto }
+    from '../../../Redux/selectors/profile-selectors';
 import { Button } from 'antd';
+import Preloader from '../../common/Preloader/Preloader';
 
 type AddPostFormValuesType = {
     newPostText: string,
@@ -34,6 +36,9 @@ const MyPosts: FC = React.memo(() => {
         dispatch(actions.addPostActionCreator(values.newPostText));
     }
 
+    if (!postsData) {
+        return <Preloader />
+    }
     return (
         <div className={styles.postsBlock}>
             <h3>My posts</h3>
@@ -47,15 +52,15 @@ const MyPosts: FC = React.memo(() => {
 
 type AddPostFormValuesTypeKeys = GetStringKeysType<AddPostFormValuesType>;
 
-type AddNewPostFormPropsType = {
-}
+type AddNewPostFormPropsType = {}
 
 let AddNewPostForm: FC<InjectedFormProps<AddPostFormValuesType &
     AddNewPostFormPropsType> & AddNewPostFormPropsType> = (props) => {
         return (
             <form onSubmit={props.handleSubmit}>
                 <div>
-                    {createField<AddPostFormValuesTypeKeys>("Post message", "newPostText", [required], Textarea)}
+                    {createField<AddPostFormValuesTypeKeys>("Post message", "newPostText",
+                        [required], Textarea)}
                     {/* name="newPostText" validate={[required, maxLengt10]} /> */}
                 </div>
                 <div>

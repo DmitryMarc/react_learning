@@ -23,9 +23,7 @@ type APIResponseTypeForGetMessagesWithUser = {
 
 type APIResponseTypeForSendMessage<ResultCodeType = ResultCodesEnum> = {
     data: {
-        message: {
-            
-        }
+        message: {}
     }
     resultCode: ResultCodeType;
     messages: Array<string>;
@@ -33,18 +31,23 @@ type APIResponseTypeForSendMessage<ResultCodeType = ResultCodesEnum> = {
 
 export const dialogsAPI = {
     getDialogs() {
-        return instance.get<Array<APIResponseTypeForDialog>>('dialogs').then(response => response.data);
+        return instance.get<Array<APIResponseTypeForDialog>>('dialogs')
+            .then(response => response.data);
     },
     addNewDialog(userId: number) {
-        return instance.put<APIResponseType>(`dialogs/${userId}`).then(response => response.data);
+        return instance.put<APIResponseType>(`dialogs/${userId}`)
+            .then(response => response.data);
     },
     getMessagesWithUser(userId: number, count: number) {
-        return instance.get<APIResponseTypeForGetMessagesWithUser>(`dialogs/${userId}/messages?count=${count}`).then(response => response.data);
+        return instance.get<APIResponseTypeForGetMessagesWithUser>(`dialogs/${userId}/messages?count=${count}`)
+            .then(response => response.data);
     },
     sendMessage(userId: number, message: string) {
-        return instance.post<APIResponseTypeForSendMessage>(`dialogs/${userId}/messages`, {body: message}).then(response => response.data);
+        return instance.post<APIResponseTypeForSendMessage>(`dialogs/${userId}/messages`, { body: message })
+            .then(response => response.data);
     },
     getNewMessagesCount() {
-        return instance.get<number>('dialogs/messages/new/count').then(response => response.data);
+        return instance.get<number>('dialogs/messages/new/count')
+            .then(response => response.data);
     }
 }
