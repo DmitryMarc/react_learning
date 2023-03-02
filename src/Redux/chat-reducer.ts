@@ -21,6 +21,11 @@ const chatReducer = (state = initialState, action:ActionsTypes): InitialStateTyp
                     .map(message => ({...message, id: v1()}))]
                     .filter((message, index, array) => index >= array.length - 100)
             };
+        case 'CHAT/MESSAGES_DELETED':
+            return {
+                ...state,
+                messages: []
+            };
         case 'CHAT/STATUS_CHANGED':
             return {
                 ...state,
@@ -36,6 +41,8 @@ type ActionsTypes = InferActionsTypes<typeof actions>
 export const actions = {
     messagesReceived: (messages: ChatMessageAPIType[]) => (
         { type: 'CHAT/MESSAGES_RECEIVED', payload: { messages } } as const),
+    messagesDeleted: () => (
+        { type: 'CHAT/MESSAGES_DELETED'} as const),
     statusChanged: (status: StatusType) => (
         { type: 'CHAT/STATUS_CHANGED', payload: { status } } as const)
 }
@@ -74,6 +81,7 @@ export const stopMessagesListeningTC = ():ThunkType => async (dispatch) => {
     chatAPI.unsubscribe('messages-received',newMessageHandlerCreator(dispatch));
     chatAPI.unsubscribe('status-changed', statusChangedHandlerCreator(dispatch));
     chatAPI.stopWSChahhel();
+    dispatch(actions.messagesDeleted());
 }
 
 export const sendMessageTC = (message: string):ThunkType => async (dispatch) => {

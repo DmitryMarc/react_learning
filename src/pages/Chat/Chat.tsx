@@ -1,13 +1,12 @@
+import { AutoComplete, Button, Col, Divider, Input, Row } from 'antd';
 import { FC, memo, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { ChatMessageAPIType } from "../../api/chat-api";
+import Preloader from "../../Components/common/Preloader/Preloader";
 import { sendMessageTC } from "../../Redux/chat-reducer";
 import { AppDispatchType } from "../../Redux/redux-store";
 import { selectChatMessages, selectStatusWS } from "../../Redux/selectors/chat-selectors";
-import { AutoComplete, Input, Button, Row, Col, Divider } from 'antd';
-import { selectAuthorizedUserId, selectIsAuth } from "../../Redux/selectors/auth-selectors";
-import { Redirect, useHistory } from "react-router-dom";
-import Preloader from "../../Components/common/Preloader/Preloader";
 
 export const Messages: FC = () => {
     const messages = useSelector(selectChatMessages);
@@ -36,7 +35,7 @@ export const Messages: FC = () => {
     }
     return (
         <div style={{ height: '600px', overflowY: 'auto' }} onScroll={scrollHandler}>
-            {messages.map((message, index) => <Message key={message.id} message={message} />)}
+            {messages.map((message) => <Message key={message.id} message={message} />)}
             <div ref={messagesAnchorRef}></div>
         </div>
     )
